@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<List>
+	<Competitive Id="0"	 	TourneyLevel="0"	Points="50"		Name="Normal" />
+	<Competitive Id="1"	 	TourneyLevel="1"	Points="100"	Name="Bronze 1" />
+	<Competitive Id="2" 	TourneyLevel="2"	Points="150"	Name="Bronze 2" />
+	<Competitive Id="3" 	TourneyLevel="3"	Points="200"	Name="Bronze 3" />
+	<Competitive Id="4" 	TourneyLevel="4"	Points="250"	Name="Iron 1" />
+	<Competitive Id="5" 	TourneyLevel="5"	Points="300"	Name="Iron 2" />
+	<Competitive Id="6" 	TourneyLevel="6"	Points="350"	Name="Iron 3" />
+	<Competitive Id="7"		TourneyLevel="7"	Points="400"	Name="Silver 1" />
+	<Competitive Id="8"		TourneyLevel="8"	Points="450"	Name="Silver 2" />
+	<Competitive Id="9"		TourneyLevel="9"	Points="500"	Name="Silver 3" />
+	<Competitive Id="10"	TourneyLevel="10"	Points="550"	Name="Gold 1" />
+	<Competitive Id="11"	TourneyLevel="11"	Points="600"	Name="Gold 2" />
+	<Competitive Id="12"	TourneyLevel="12"	Points="650"	Name="Gold 3" />
+	<Competitive Id="13"	TourneyLevel="13"	Points="700"	Name="Diamond 1" />
+	<Competitive Id="14"	TourneyLevel="14"	Points="750"	Name="Diamond 2" />
+	<Competitive Id="15"	TourneyLevel="15"	Points="800"	Name="Diamond 3" />
+	<Competitive Id="16"	TourneyLevel="16"	Points="850"	Name="Emerald 1" />
+	<Competitive Id="17"	TourneyLevel="17"	Points="900"	Name="Emerald 2" />
+	<Competitive Id="18"	TourneyLevel="18"	Points="1000"	Name="Champion" />
+	<Competitive Id="19"	TourneyLevel="19"	Points="1500"	Name="Grand Champion" />
+	<Competitive Id="20"	TourneyLevel="20"	Points="2500"	Name="War Hero" />
+</List>

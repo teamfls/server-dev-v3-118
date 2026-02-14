@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<List>
+    <Event Id="1" Begin="2510010000" Ended="2612012359" Name="Rank Up Event" Description="RANK"  Period="true" Priority="false">
+		<Rewards>
+			<Rank UpId="0" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="1" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="2" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="3" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="4" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="5" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="6" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="7" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="8" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="9" BonusExp="150" BonusPoint="500" Percent="10" />
+			<Rank UpId="10" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="11" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="12" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="13" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="14" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="15" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="16" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="17" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="18" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="19" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="20" BonusExp="500" BonusPoint="1000" Percent="10" />
+			<Rank UpId="21" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="22" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="23" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="24" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="25" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="26" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="27" BonusExp="10000" BonusPoint="15000" Percent="10" />
+			<Rank UpId="28" BonusExp="10000" BonusPoint="25000" Percent="10" />
+			<Rank UpId="29" BonusExp="10000" BonusPoint="25000" Percent="10" />
+			<Rank UpId="30" BonusExp="10000" BonusPoint="25000" Percent="10" />
+			<Rank UpId="31" BonusExp="10000" BonusPoint="25000" Percent="10" />
+			<Rank UpId="32" BonusExp="10000" BonusPoint="25000" Percent="10" />
+			<Rank UpId="33" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="34" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="35" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="36" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="37" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="38" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="39" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="40" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="41" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="42" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="43" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="44" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="45" BonusExp="50000" BonusPoint="75000" Percent="10" />
+			<Rank UpId="46" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="47" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="48" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="49" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="50" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="51" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="52" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="53" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="54" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="55" BonusExp="98000" BonusPoint="250000" Percent="10" />
+			<Rank UpId="56" BonusExp="98000" BonusPoint="250000" Percent="10" />
+		</Rewards>
+	</Event>
+</List>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<List>
+	<Item Count="14"> ;FaceBook Box
+		<Rewards>
+			<Good Index="0" 	Id="170006401" Percent="30" 	Special="false" />
+			<Good Index="1" 	Id="170002801" Percent="40" 	Special="false" />
+			<Good Index="2" 	Id="170002601" Percent="60" 	Special="false" />
+			<Good Index="3" 	Id="170003601" Percent="40" 	Special="false" />
+			<Good Index="4" 	Id="170004401" Percent="60" 	Special="false" />
+			<Good Index="5" 	Id="170018501" Percent="60" 	Special="false" />
+			<Good Index="6" 	Id="170003401" Percent="60" 	Special="false" />
+			<Good Index="7" 	Id="170002701" Percent="60" 	Special="false" />
+		    <Good Index="8" 	Id="170001701" Percent="60" 	Special="false" />
+		    <Good Index="9" 	Id="170001401" Percent="60" 	Special="false" />
+		    <Good Index="10" 	Id="50800201"  Percent="100" 	Special="false" />
+		    <Good Index="11" 	Id="200005001" Percent="100" 	Special="false" />
+		    <Good Index="12" 	Id="200100001" Percent="10" 	Special="false" />
+		    <Good Index="13" 	Id="200050001" Percent="20" 	Special="false" />
+		</Rewards>
+	</Item>
+</List>

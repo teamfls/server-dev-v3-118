@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<List>
+	<Mission Id="1" 	Enable="false"	ItemId="2200001" /> ;?? Tutorial Mission Card
+	<Mission Id="2" 	Enable="false"	ItemId="2200002" /> ;?? Dino Tutorial Mission Card
+	<Mission Id="3" 	Enable="false"	ItemId="2200003" /> ;?? Human Tutorial Mission Card
+	<!--Mission Id="4" 	Enable="false"	ItemId="0" /--> ;Unknown Mission Card ??
+	<Mission Id="5" 	Enable="false"	ItemId="2600005" /> ;Assault Mission Card
+	<Mission Id="6" 	Enable="false"	ItemId="2600006" /> ;Batallion Mission Card
+	<Mission Id="7" 	Enable="false"	ItemId="2600007" /> ;Invasion Mission Card
+	<Mission Id="8" 	Enable="false"	ItemId="2600008" /> ;Defence Mission Card
+	<Mission Id="9" 	Enable="false"	ItemId="2600009" /> ;Explosion Mission Card
+	<Mission Id="10" 	Enable="false"	ItemId="2600010" /> ;Supression Mission Card
+	<Mission Id="11" 	Enable="false"	ItemId="2600011" /> ;Special Force Mission Card
+	<Mission Id="12" 	Enable="false"	ItemId="2600012" /> ;Defcon Mission Card
+	<Mission Id="13" 	Enable="false"	ItemId="2600013" /> ;Unknown Mission Card (Event)
+	<Mission Id="14" 	Enable="false"	ItemId="2600014" /> ;Dino Mission Card
+	<Mission Id="15" 	Enable="false"	ItemId="2600015" /> ;Human Mission Card
+	<Mission Id="16" 	Enable="false"	ItemId="2600016" /> ;Unknown Mission Card
+	<Mission Id="17" 	Enable="false"	ItemId="2600017" /> ;Unknown Mission Card
+</List>

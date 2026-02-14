@@ -1,0 +1,74 @@
+﻿2026-02-14 15:07:20 Processed 1 configurations, 0 errors from Data/ServerConfig.json
+2026-02-14 15:07:20 Server configurations loaded: 1 configs from Data/ServerConfig.json
+2026-02-14 15:07:20 Plugin Loaded: 2 Command Helpers
+2026-02-14 15:07:20 Plugin Loaded: 18 Allowed DRAR
+2026-02-14 15:07:20 All critical configurations validated successfully
+2026-02-14 15:07:20 Plugin Loaded: 1 Event Login
+2026-02-14 15:07:20 Plugin Loaded: 3 Event Boost Bonus
+2026-02-14 15:07:20 Plugin Loaded: 1 Event Rank Up
+2026-02-14 15:07:20 Plugin Loaded: 1 Time Events
+2026-02-14 15:07:20 Plugin Loaded: 1 Event Quest
+2026-02-14 15:07:20 Plugin Loaded: 7 Event Visit
+2026-02-14 15:07:20 Plugin Loaded: 1 Event X-Mas
+2026-02-14 15:07:20 Plugin Loaded: 6 Listed Event Portal
+2026-02-14 15:07:20 Plugin Loaded: 3443 Buyable Items
+2026-02-14 15:07:20 Plugin Loaded: 2 Repairable Items
+2026-02-14 15:07:20 Plugin Loaded: 0 Limited Items
+2026-02-14 15:07:21 Plugin Loaded: 640 Mission Card List
+2026-02-14 15:07:21 Plugin Loaded: 160 Mission Card Awards
+2026-02-14 15:07:21 Plugin Loaded: 1280 Mission Card List
+2026-02-14 15:07:21 Plugin Loaded: 7 Mission Reward Items
+2026-02-14 15:07:21 Plugin Loaded: 24 Basic Templates
+2026-02-14 15:07:21 Plugin Loaded: 2 PC Cafes
+2026-02-14 15:07:21 Plugin Loaded: 8 Award Templates
+2026-02-14 15:07:21 Plugin Loaded: 44 Title System
+2026-02-14 15:07:21 Plugin Loaded: 0 Title Awards
+2026-02-14 15:07:21 Plugin Loaded: 15 Mission Awards
+2026-02-14 15:07:21 Plugin Loaded: 16 Mission Stores
+2026-02-14 15:07:21 Plugin Loaded: 4 Server Channel
+2026-02-14 15:07:21 Plugin Loaded: 64 Map Rules
+2026-02-14 15:07:21 Plugin Loaded: 135 Map Matches
+2026-02-14 15:07:21 Plugin Loaded: 49 Clan Ranks
+2026-02-14 15:07:21 Plugin Loaded: 58 Player Ranks
+2026-02-14 15:07:21 Plugin Loaded: 26 Coupon Effects
+2026-02-14 15:07:21 Plugin Loaded: 7 Permissions
+2026-02-14 15:07:21 Plugin Loaded: 3 Permission Ranks
+2026-02-14 15:07:21 Plugin Loaded: 3 Level Permission
+2026-02-14 15:07:21 Plugin Loaded: 6 Random Boxes
+2026-02-14 15:07:21 Plugin Loaded: 8 Battle Boxes
+2026-02-14 15:07:21 Plugin Loaded: 17 Lib Hases
+2026-02-14 15:07:21 Plugin Loaded: 3 Internet Cafe Bonuses
+2026-02-14 15:07:21 Plugin Loaded: 16 Redeem Codes
+2026-02-14 15:07:21 Plugin Loaded: 3 Battle Rewards
+2026-02-14 15:07:21 Plugin Loaded: 1231 Nick Filters
+2026-02-14 15:07:21 ClassicMode Load Success
+2026-02-14 15:07:21 BattlePassManager: Starting Battle Pass data loading
+2026-02-14 15:07:21 BattlePassManager: They were loaded 1 seasons
+2026-02-14 15:07:21 active season found: Battle Pass Season 2 (ID: 1)
+2026-02-14 15:07:21 BattlePassManager: They were loaded 50 cards for the active season
+2026-02-14 15:07:21 BattlePassManager: Data load completed successfully
+2026-02-14 15:07:21 Plugin Loaded: 21 Competitive Ranks
+2026-02-14 15:07:21 RconManager Address ws://26.28.8.111:30000
+2026-02-14 15:07:21 Communication Address 127.0.0.1:1909
+2026-02-14 15:07:21 All Server Plugins Successfully Loaded
+2026-02-14 15:07:22 Auth Sync Address 127.0.0.1:1910
+2026-02-14 15:07:22 Auth Serv Address 127.0.0.1:39190
+2026-02-14 15:07:22 Loaded 1 clans successfully.
+2026-02-14 15:07:22 Game Sync Address 127.0.0.1:1911
+2026-02-14 15:07:22 Game Serv Address 127.0.0.1:39191
+2026-02-14 15:07:22 Game Sync Address 127.0.0.1:1912
+2026-02-14 15:07:22 Game Serv Address 127.0.0.1:39192
+2026-02-14 15:07:22 Game Sync Address 127.0.0.1:1913
+2026-02-14 15:07:22 Game Serv Address 127.0.0.1:39193
+2026-02-14 15:07:22 Match Sync Address 127.0.0.1:2729
+2026-02-14 15:07:22 Match Serv Address 127.0.0.1:40009
+2026-02-14 15:07:22 Startup Successful, Server Runtime 2026
+2026-02-14 15:07:53 Account User: test2, Player UID: 2, Is Connected
+2026-02-14 15:12:33 Account User: test11, Player UID: 13, Is Connected
+2026-02-14 15:13:11 PROTOCOL_GMCHAT_APPLY_PENALTY_REQ: From=TEST #1, TargetId=13, Type=1, BanTime=600, Reason=Phishing
+2026-02-14 15:13:11 PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Type=1, BanTime=600, Target=13
+2026-02-14 15:14:21 PROTOCOL_GMCHAT_APPLY_PENALTY_REQ: From=TEST #1, TargetId=13, Type=2, BanTime=1440, Reason=Using Program Ilegal
+2026-02-14 15:14:21 PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Type=2, BanTime=1440, Target=13
+2026-02-14 15:14:21 Account User: test11, Player UID: 13, Is Disconnected
+2026-02-14 15:15:42 Account is banned until 2026-02-15 15:14:21 [test11]
+2026-02-14 15:21:06 Account User: test2, Player UID: 2, Is Disconnected

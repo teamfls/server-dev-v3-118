@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<List>
+	<BattleBox RequireTags="10"> ; Lion Battle Box
+		<Rewards>
+			<!-- Primeiro Grupo (3%) -->
+			<Good Id="10317504" Percent="80" /> ; SCAR-L Carbine D
+			<Good Id="10378804" Percent="60" /> ; SC-2010 Element Fire
+			<Good Id="10325004" Percent="50" /> ; AUG A3 Cupid
+			<Good Id="10378304" Percent="40" /> ; Pindad SS2 V5 Gamer Basic
+			<Good Id="10344904" Percent="30" /> ; AUG A3 Digital
+			<Good Id="10475904" Percent="80" /> ; P90 Ext. Technicolor
+			<Good Id="10350704" Percent="60" /> ; AUG A3 Splash
+			<Good Id="10544404" Percent="50" /> ; L115A1 10th year
+			<Good Id="13614104" Percent="40" /> ; APC9 Element of Water
+			<Good Id="10374204" Percent="30" /> ; Pindad SS2 V5 El Dorado
+
+			<!-- Segundo Grupo (Porcentagens Variadas) -->
+			<Good Id="10332404" Percent="80" /> ; AUG A3 Beyond
+			<Good Id="10322804" Percent="60" /> ; AUG A3 Camo Soldier
+			<Good Id="10302304" Percent="50" /> ; M4A1 Gold
+			<Good Id="10309204" Percent="40" /> ; AK SOPMOD R
+			<Good Id="10327604" Percent="30" /> ; SC-2010 Dolphin
+			<Good Id="10508304" Percent="80" /> ; Cheytac M200 Brazuca
+			<Good Id="10312304" Percent="60" /> ; TAR-21
+			<Good Id="10374104" Percent="50" /> ; AUG A3 El Dorado
+			<Good Id="10354504" Percent="40" /> ; AUG A3 Technicolor
+			<Good Id="10549504" Percent="30" /> ; Tactilite T2 PBNC2021
+
+			<!-- Terceiro Grupo (Porcentagens Variadas) -->
+			<Good Id="10452104" Percent="80" /> ; P90 Ext Fire Dragon
+			<Good Id="10334804" Percent="60" /> ; SC-2010 Green
+			<Good Id="10381904" Percent="50" /> ; AUG A3 Element of Nature
+			<Good Id="20211404" Percent="40" /> ; Tec-9 Gold
+			<Good Id="10322704" Percent="30" /> ; AUG A3 Cobra
+			<Good Id="10370204" Percent="80" /> ; AUG A3 Gamer Deluxe
+			<Good Id="10342704" Percent="60" /> ; AUG A3 Puppy
+			<Good Id="10375104" Percent="50" /> ; SC-2010 NewYear2022
+			<Good Id="10624204" Percent="40" /> ; SPAS-15 Recamo
+			<Good Id="10359404" Percent="30" /> ; AUG A3 PBLC2019
+
+			<!-- Item Especial (5%) -->
+			<Good Id="10344304" Percent="5" /> ; Lion
+		</Rewards>
+	</BattleBox>
+</List>
