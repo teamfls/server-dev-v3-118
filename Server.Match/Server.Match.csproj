@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Users\home\Desktop\dll\Server.Match-deobfuscated-Cleaned.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C70194D-8B99-4993-BA0D-5EDD4418CC5A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Server.Match</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <ApplicationVersion>1.1.25163.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Server.Match</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\Managers\DeadBodyManager.cs" />
+    <Compile Include="MatchClient.cs" />
+    <Compile Include="MatchXender.cs" />
+    <Compile Include="MatchManager.cs" />
+    <Compile Include="Network\Packets\PROTOCOL_BOTS_ACTION.cs" />
+    <Compile Include="Network\Packets\PROTOCOL_CONNECT.cs" />
+    <Compile Include="Network\Packets\PROTOCOL_EVENTS_ACTION.cs" />
+    <Compile Include="Network\Actions\SubHead\ObjectMove.cs" />
+    <Compile Include="Network\Actions\SubHead\StageInfoObjControl.cs" />
+    <Compile Include="Network\Actions\SubHead\DropedWeapon.cs" />
+    <Compile Include="Network\Actions\SubHead\GrenadeSync.cs" />
+    <Compile Include="Network\Actions\SubHead\ObjectAnim.cs" />
+    <Compile Include="Network\Actions\SubHead\ObjectStatic.cs" />
+    <Compile Include="Network\Actions\SubHead\StageInfoObjStatic.cs" />
+    <Compile Include="Network\Actions\SubHead\StageInfoObjAnim.cs" />
+    <Compile Include="Network\Actions\Event\ActionForObjectSync.cs" />
+    <Compile Include="Network\Actions\Event\ActionState.cs" />
+    <Compile Include="Network\Actions\Event\Animation.cs" />
+    <Compile Include="Network\Actions\Event\CharaFireNHitData.cs" />
+    <Compile Include="Network\Actions\Event\DropWeapon.cs" />
+    <Compile Include="Network\Actions\Event\FireData.cs" />
+    <Compile Include="Network\Actions\Event\FireDataOnObject.cs" />
+    <Compile Include="Network\Actions\Event\FireNHitDataOnObject.cs" />
+    <Compile Include="Network\Actions\Event\GetWeaponForClient.cs" />
+    <Compile Include="Network\Actions\Event\GetWeaponForHost.cs" />
+    <Compile Include="Network\Actions\Event\GrenadeHit.cs" />
+    <Compile Include="Network\Actions\Event\HitData.cs" />
+    <Compile Include="Network\Actions\Event\HpSync.cs" />
+    <Compile Include="Network\Actions\Event\MissionData.cs" />
+    <Compile Include="Network\Actions\Event\PosRotation.cs" />
+    <Compile Include="Network\Actions\Event\RadioChat.cs" />
+    <Compile Include="Network\Actions\Event\SeizeDataForClient.cs" />
+    <Compile Include="Network\Actions\Event\SoundPosRotation.cs" />
+    <Compile Include="Network\Actions\Event\Suicide.cs" />
+    <Compile Include="Network\Actions\Event\UseObject.cs" />
+    <Compile Include="Network\Actions\Event\WeaponRecoil.cs" />
+    <Compile Include="Network\Actions\Event\WeaponSync.cs" />
+    <Compile Include="Data\XML\CharaStructureXML.cs" />
+    <Compile Include="Data\XML\ItemStatisticXML.cs" />
+    <Compile Include="Data\XML\MapStructureXML.cs" />
+    <Compile Include="Data\Utils\AllUtils.cs" />
+    <Compile Include="Data\Sync\MatchSync.cs" />
+    <Compile Include="Data\Sync\Server\SendMatchInfo.cs" />
+    <Compile Include="Data\Sync\Client\MatchRoundSync.cs" />
+    <Compile Include="Data\Sync\Client\RemovePlayerSync.cs" />
+    <Compile Include="Data\Sync\Client\RespawnSync.cs" />
+    <Compile Include="Data\Models\ItemsStatistic.cs" />
+    <Compile Include="Data\Models\ActionModel.cs" />
+    <Compile Include="Data\Models\AnimModel.cs" />
+    <Compile Include="Data\Models\AssistServerData.cs" />
+    <Compile Include="Data\Models\BombPosition.cs" />
+    <Compile Include="Data\Models\CharaModel.cs" />
+    <Compile Include="Data\Models\DeathServerData.cs" />
+    <Compile Include="Data\Models\DeffectModel.cs" />
+    <Compile Include="Data\Models\MapModel.cs" />
+    <Compile Include="Data\Models\ObjectHitInfo.cs" />
+    <Compile Include="Data\Models\ObjectInfo.cs" />
+    <Compile Include="Data\Models\ObjectModel.cs" />
+    <Compile Include="Data\Models\PacketModel.cs" />
+    <Compile Include="Data\Models\PlayerModel.cs" />
+    <Compile Include="Data\Models\Equipment.cs" />
+    <Compile Include="Data\Models\RoomModel.cs" />
+    <Compile Include="Data\Models\SubHead\ObjectMoveInfo.cs" />
+    <Compile Include="Data\Models\SubHead\StageControlInfo.cs" />
+    <Compile Include="Data\Models\SubHead\DropedWeaponInfo.cs" />
+    <Compile Include="Data\Models\SubHead\GrenadeInfo.cs" />
+    <Compile Include="Data\Models\SubHead\ObjectAnimInfo.cs" />
+    <Compile Include="Data\Models\SubHead\ObjectStaticInfo.cs" />
+    <Compile Include="Data\Models\SubHead\StageAnimInfo.cs" />
+    <Compile Include="Data\Models\SubHead\StageStaticInfo.cs" />
+    <Compile Include="Data\Models\Event\HPSyncInfo.cs" />
+    <Compile Include="Data\Models\Event\SeizeDataForClientInfo.cs" />
+    <Compile Include="Data\Models\Event\SoundPosRotationInfo.cs" />
+    <Compile Include="Data\Models\Event\WeaponRecoilInfo.cs" />
+    <Compile Include="Data\Models\Event\ActionStateInfo.cs" />
+    <Compile Include="Data\Models\Event\AnimationInfo.cs" />
+    <Compile Include="Data\Models\Event\CharaFireNHitDataInfo.cs" />
+    <Compile Include="Data\Models\Event\DropWeaponInfo.cs" />
+    <Compile Include="Data\Models\Event\FireDataInfo.cs" />
+    <Compile Include="Data\Models\Event\FireDataObjectInfo.cs" />
+    <Compile Include="Data\Models\Event\FireNHitDataObjectInfo.cs" />
+    <Compile Include="Data\Models\Event\GrenadeHitInfo.cs" />
+    <Compile Include="Data\Models\Event\HitDataInfo.cs" />
+    <Compile Include="Data\Models\Event\MissionDataInfo.cs" />
+    <Compile Include="Data\Models\Event\PosRotationInfo.cs" />
+    <Compile Include="Data\Models\Event\RadioChatInfo.cs" />
+    <Compile Include="Data\Models\Event\SuicideInfo.cs" />
+    <Compile Include="Data\Models\Event\UseObjectInfo.cs" />
+    <Compile Include="Data\Models\Event\WeaponClient.cs" />
+    <Compile Include="Data\Models\Event\WeaponHost.cs" />
+    <Compile Include="Data\Models\Event\WeaponSyncInfo.cs" />
+    <Compile Include="Data\Models\Event\Event\ActionObjectInfo.cs" />
+    <Compile Include="Data\Managers\AssistManager.cs" />
+    <Compile Include="Data\Managers\RoomsManager.cs" />
+    <Compile Include="Data\Managers\DamageManager.cs" />
+    <Compile Include="Data\Enums\CharaHitPart.cs" />
+    <Compile Include="Data\Enums\ActionFlag.cs" />
+    <Compile Include="Data\Enums\BombFlag.cs" />
+    <Compile Include="Data\Enums\CharaResId.cs" />
+    <Compile Include="Data\Enums\CharaMoves.cs" />
+    <Compile Include="Data\Enums\HitType.cs" />
+    <Compile Include="Data\Enums\ObjectType.cs" />
+    <Compile Include="Data\Enums\UdpGameEvent.cs" />
+    <Compile Include="Data\Enums\UdpSubHead.cs" />
+    <Compile Include="Data\Enums\WeaponSyncType.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plugin.Core\Plugin.Core.csproj">
+      <Project>{a9cdd1ea-fc33-4224-8f3e-bc39f3531965}</Project>
+      <Name>Plugin.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
