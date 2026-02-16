@@ -45,7 +45,7 @@ namespace Server.Game.Network.ClientPacket
                         return;
 
                     bool flag = room.IsBotMode();
-                    Slot.SpecGM = this.Field0 == (byte)2 && player.IsGM() || room.RoomType == RoomCondition.Ace && (Slot.Id < 0 || Slot.Id > 1);
+                    Slot.SpecGM = this.Field0 == (byte)2 || room.RoomType == RoomCondition.Ace && (Slot.Id < 0 || Slot.Id > 1);
 
                     // Logging untuk debugging
                     CLogger.Print($"[DEBUG] Player: {player.Nickname}, RoomType: {room.RoomType}, IsLeader: {room.Leader == player.SlotId}", LoggerType.Debug);

@@ -41,9 +41,17 @@ namespace Server.Game.Data.Sync.Update
                 AllUtils.CompleteMission(Room, Killer, Kill, MissionType.NA, 0);
                 Kill.Score = Score;
             }
+            if (IsSuicide && Killer.SpecGM)
+            {
+                Kill.KillerSlot = 255;
+            }
+
             using (PROTOCOL_BATTLE_DEATH_ACK Packet = new PROTOCOL_BATTLE_DEATH_ACK(Room, Kill, Killer))
                 Room.SendPacketToPlayers(Packet, SlotState.BATTLE, 0);
+
             RoomDeath.EndBattleByDeath(Room, Killer, IsBotMode, IsSuicide, Kill);
+
+
         }
     }
 }

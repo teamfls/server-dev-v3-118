@@ -1204,6 +1204,10 @@ namespace Server.Game.Data.Utils
 
             foreach (SlotModel slot in room.Slots)
             {
+                // Skip observers - they should not affect battle end conditions
+                if (slot.SpecGM)
+                    continue;
+                    
                 if (slot.State == SlotState.BATTLE)
                 {
                     if (slot.Team == TeamEnum.FR_TEAM)

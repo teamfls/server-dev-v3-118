@@ -72,10 +72,35 @@ namespace Server.Game.Network.ClientPacket
                 if (room == null || room.State != RoomState.BATTLE)
                     return;
                 SlotModel slot = room.GetSlot(player.SlotId);
+                
+                // DEBUG LOGGING - Log all observer requests
+                if (slot != null && slot.SpecGM)
+                {
+                    CLogger.Print($"[RESPAWN DEBUG] Observer {player.Nickname} requested. FirstRespawn: {slot.FirstRespawn}, State: {slot.State}", LoggerType.Debug);
+                }
+
                 if (slot == null || slot.State != SlotState.BATTLE)
                     return;
-                if (slot.DeathState.HasFlag((Enum)DeadEnum.Dead) || slot.DeathState.HasFlag((Enum)DeadEnum.UseChat))
+
+                // Clear DeathState for normal players, but NOT for observers who are Dead (watching kill cam)
+                if (slot.DeathState.HasFlag((Enum)DeadEnum.Dead))
+                {
+                    if (slot.SpecGM)
+                    {
+                        // Observer is watching kill cam - do NOT clear state and do NOT send RESPAWN_ACK
+                        CLogger.Print($"[RESPAWN DEBUG] Ignoring RESPAWN_REQ for Observer {player.Nickname} (watching kill cam, DeathState: Dead)", LoggerType.Debug);
+                        return;
+                    }
+                    else
+                    {
+                        // Normal player can respawn
+                        slot.DeathState = DeadEnum.Alive;
+                    }
+                }
+                else if (slot.DeathState.HasFlag((Enum)DeadEnum.UseChat))
+                {
                     slot.DeathState = DeadEnum.Alive;
+                }
                 PlayerEquipment Equip = AllUtils.ValidateRespawnEQ(slot, this.Field0);
                 if (Equip != null)
                 {
@@ -122,18 +147,52 @@ namespace Server.Game.Network.ClientPacket
                             break;
                     }
                 }
+                
                 using (PROTOCOL_BATTLE_RESPAWN_ACK Packet = new PROTOCOL_BATTLE_RESPAWN_ACK(room, slot))
-                    room.SendPacketToPlayers(Packet, SlotState.BATTLE, 0);
+                {
+                    if (slot.SpecGM)
+                    {
+                        // Send RESPAWN_ACK only for the first join to complete loading
+                        // Subsequent respawns: skip RESPAWN_ACK to prevent observer from seeing their own body
+                        if (slot.FirstRespawn)
+                        {
+                            CLogger.Print($"[RESPAWN DEBUG] Sending initial RESPAWN_ACK to Observer {player.Nickname}", LoggerType.Debug);
+                            player.SendPacket(Packet);
+                        }
+                        else
+                        {
+                            CLogger.Print($"[RESPAWN DEBUG] Skipping RESPAWN_ACK for Observer {player.Nickname} (prevents local body spawn)", LoggerType.Debug);
+                        }
+                    }
+                    else
+                    {
+                        room.SendPacketToPlayers(Packet, SlotState.BATTLE, 0);
+                    }
+                }
+
                 if (slot.FirstRespawn)
                 {
                     slot.FirstRespawn = false;
-                    EquipmentSync.SendUDPPlayerSync(room, slot, player.Effects, 0);
+                    if (!slot.SpecGM)
+                    {
+                        // Only send EquipmentSync for normal players, never for observers
+                        EquipmentSync.SendUDPPlayerSync(room, slot, player.Effects, 0);
+                        CLogger.Print($"[RESPAWN DEBUG] Sent EquipmentSync (Type 0) for {player.Nickname}", LoggerType.Debug);
+                    }
+                    else
+                    {
+                        CLogger.Print($"[RESPAWN DEBUG] Skipped EquipmentSync for Observer {player.Nickname} (prevents body visibility)", LoggerType.Debug);
+                    }
                 }
-                else
+                else if (!slot.SpecGM)
+                {
                     EquipmentSync.SendUDPPlayerSync(room, slot, player.Effects, 2);
-                if (room.WeaponsFlag == (RoomWeaponsFlag)this.Field1)
-                    return;
-                CLogger.Print($"Player '{player.Nickname}' Weapon Flags Doesn't Match! (Room: {(int)room.WeaponsFlag}; Player: {this.Field1})", LoggerType.Warning);
+                }
+                
+                if (!slot.SpecGM && room.WeaponsFlag != (RoomWeaponsFlag)this.Field1)
+                {
+                    CLogger.Print($"Player '{player.Nickname}' Weapon Flags Doesn't Match! (Room: {(int)room.WeaponsFlag}; Player: {this.Field1})", LoggerType.Warning);
+                }
             }
             catch (Exception ex)
             {

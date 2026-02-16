@@ -21,16 +21,13 @@ namespace Server.Game.Network.ClientPacket
                 if (player != null)
                 {
                     RoomModel room = player.GetRoom();
-                    if (room != null && player.IsGM())
+                    if (room != null)
                     {
                         SlotModel slot = room.GetSlot(player.SlotId);
                         if (slot != null)
                         {
                             slot.ViewType = ViewerType;
-                            if (slot.ViewType == ViewerType.SpecGM)
-                            {
-                                slot.SpecGM = true;
-                            }
+                            slot.SpecGM = (slot.ViewType == ViewerType.SpecGM);
                             Client.SendPacket(new PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK(slot.Id));
                         }
                     }

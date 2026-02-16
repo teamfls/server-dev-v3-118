@@ -4,6 +4,7 @@
 // MVID: 2BF67F5F-ABA1-4CD4-BD5E-51B3899CA9A8
 // Assembly location: C:\Users\home\Desktop\dll\Server.Game-deobfuscated-Cleaned.dll
 
+using Plugin.Core;
 using Plugin.Core.Enums;
 using Server.Game.Data.Models;
 using System.Runtime.CompilerServices;
@@ -51,6 +52,16 @@ namespace Server.Game.Network.ServerPacket
             {
                 this.WriteH((ushort)this.Field0.FRKills);
                 this.WriteH((ushort)this.Field0.CTKills);
+            }
+            
+            // Reset FirstRespawn for observers at round end to allow proper respawn in next round
+            foreach (var slot in this.Field0.Slots)
+            {
+                if (slot != null && slot.SpecGM && !slot.FirstRespawn)
+                {
+                    slot.FirstRespawn = true;
+                    CLogger.Print($"[RESPAWN DEBUG] Reset FirstRespawn for Observer in slot {slot.Id} at round end", LoggerType.Debug);
+                }
             }
         }
     }

@@ -2037,7 +2037,7 @@ namespace Server.Game.Data.Models
             {
                 foreach (SlotModel slot in this.Slots)
                 {
-                    if (slot.PlayerId > 0L && (slot.Team == Team || Team == TeamEnum.TEAM_DRAW) && (InBattle && slot.State == SlotState.BATTLE_LOAD && !slot.Spectator || !InBattle && slot.State >= SlotState.LOAD))
+                    if (slot.PlayerId > 0L && !slot.SpecGM && (slot.Team == Team || Team == TeamEnum.TEAM_DRAW) && (InBattle && slot.State == SlotState.BATTLE_LOAD && !slot.Spectator || !InBattle && slot.State >= SlotState.LOAD))
                         ++playingPlayers;
                 }
             }
@@ -2051,7 +2051,7 @@ namespace Server.Game.Data.Models
             {
                 foreach (SlotModel slot in this.Slots)
                 {
-                    if (slot.PlayerId > 0L && (Type == 0 && slot.State == State || Type == 1 && slot.State > State) && (Team == TeamEnum.TEAM_DRAW || slot.Team == Team))
+                    if (slot.PlayerId > 0L && !slot.SpecGM && (Type == 0 && slot.State == State || Type == 1 && slot.State > State) && (Team == TeamEnum.TEAM_DRAW || slot.Team == Team))
                         ++playingPlayers;
                 }
             }
@@ -2065,7 +2065,7 @@ namespace Server.Game.Data.Models
             {
                 foreach (SlotModel slot in this.Slots)
                 {
-                    if (slot.Id != Exception && slot.PlayerId > 0L && (Type == 0 && slot.State == State || Type == 1 && slot.State > State) && (Team == TeamEnum.TEAM_DRAW || slot.Team == Team))
+                    if (slot.Id != Exception && slot.PlayerId > 0L && !slot.SpecGM && (Type == 0 && slot.State == State || Type == 1 && slot.State > State) && (Team == TeamEnum.TEAM_DRAW || slot.Team == Team))
                         ++playingPlayers;
                 }
             }
@@ -2080,7 +2080,7 @@ namespace Server.Game.Data.Models
             {
                 foreach (SlotModel slot in this.Slots)
                 {
-                    if (slot.PlayerId > 0L && (InBattle && slot.State == SlotState.BATTLE && !slot.Spectator || !InBattle && slot.State >= SlotState.RENDEZVOUS))
+                    if (slot.PlayerId > 0L && !slot.SpecGM && (InBattle && slot.State == SlotState.BATTLE && !slot.Spectator || !InBattle && slot.State >= SlotState.RENDEZVOUS))
                     {
                         if (slot.Team != TeamEnum.FR_TEAM)
                             ++PlayerCT;
@@ -2106,14 +2106,14 @@ namespace Server.Game.Data.Models
             {
                 foreach (SlotModel slot in this.Slots)
                 {
-                    if (slot.DeathState.HasFlag((Enum)DeadEnum.Dead))
+                    if (slot.DeathState.HasFlag((Enum)DeadEnum.Dead) && !slot.SpecGM)
                     {
                         if (slot.Team == TeamEnum.FR_TEAM)
                             ++DeathFR;
                         else
                             ++DeathCT;
                     }
-                    if (slot.PlayerId > 0L && (InBattle && slot.State == SlotState.BATTLE && !slot.Spectator || !InBattle && slot.State >= SlotState.RENDEZVOUS))
+                    if (slot.PlayerId > 0L && !slot.SpecGM && (InBattle && slot.State == SlotState.BATTLE && !slot.Spectator || !InBattle && slot.State >= SlotState.RENDEZVOUS))
                     {
                         if (slot.Team != TeamEnum.FR_TEAM)
                             ++PlayerCT;
