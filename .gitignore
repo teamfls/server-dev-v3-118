@@ -362,9 +362,10 @@ MigrationBackup/
 FodyWeavers.xsd
 /packages
 [Pp]ackages/
-[Dd]ebug/
-binary/
-Logs/
+# binary/
+# Logs/
+# [Dd]ebug/
+
 *.bin
 *.log
 *.txt
