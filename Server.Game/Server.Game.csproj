@@ -535,6 +535,7 @@
     <Compile Include="Network\ClientPacket\PROTOCOL_CS_SECESSION_CLAN_REQ.cs" />
     <Compile Include="Network\ClientPacket\PROTOCOL_GMCHAT_END_CHAT_REQ.cs" />
     <Compile Include="Network\ClientPacket\PROTOCOL_GMCHAT_START_CHAT_REQ.cs" />
+    <Compile Include="Network\ClientPacket\PROTOCOL_GMCHAT_APPLY_PENALTY_MULTI_REQ.cs" />
     <Compile Include="Network\ClientPacket\PROTOCOL_GMCHAT_APPLY_PENALTY_REQ.cs" />
     <Compile Include="Network\ClientPacket\PROTOCOL_GM_LOG_LOBBY_REQ.cs" />
     <Compile Include="Network\ClientPacket\PROTOCOL_GM_LOG_ROOM_REQ.cs" />

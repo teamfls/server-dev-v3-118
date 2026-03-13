@@ -201,6 +201,8 @@ namespace Server.Game.Network.ClientPacket
                             else
                                 this.Field3 = 2147483648U /*0x80000000*/;
                         }
+
+
                         else if (A_2.Category == ItemCategory.Coupon && RandomBoxXML.ContainsBox(this.Field1))
                         {
                             RandomBoxModel box = RandomBoxXML.GetBox(this.Field1);

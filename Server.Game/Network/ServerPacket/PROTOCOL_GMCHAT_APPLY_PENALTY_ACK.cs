@@ -39,26 +39,47 @@ namespace Server.Game.Network.ServerPacket
                     {
                         case 0: // Mute (Client might send 0)
                         case 1: // Mute
-                            if (BanTime == 0)
+                            if (BanTime <= 0)
                             {
+                                CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Processing UN-MUTE for {Player.PlayerId}. BanObjectId={Player.BanObjectId}", LoggerType.Info);
+                                // Set expiry in the past to release immediately
                                 if (Player.BanObjectId > 0)
-                                    ComDiv.UpdateDB("base_ban_history", "expire_date", DateTime.Now, "object_id", Player.BanObjectId);
+                                {
+                                    ComDiv.UpdateDB("base_ban_history", "expire_date", DateTime.Now.AddDays(-1), "object_id", Player.BanObjectId);
+                                }
                                 else
-                                    CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Target {Player.PlayerId} has no BanObjectId to un-mute.", LoggerType.Warning);
+                                {
+                                    // If we don't know the exact BanObjectId, we can't easily expire it from here
+                                    // But we should at least clear the account link
+                                    CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Target {Player.PlayerId} has no active BanObjectId in memory, but clearing link anyway.", LoggerType.Warning);
+                                }
+                                
+                                ComDiv.UpdateDB("accounts", "ban_object_id", 0, "player_id", Player.PlayerId);
+                                Player.BanObjectId = 0;
+                                
+                                string Message = $"Player '{Player.Nickname}' has been un-muted by GM.";
+                                using (PROTOCOL_SERVER_MESSAGE_ANNOUNCE_ACK Packet = new PROTOCOL_SERVER_MESSAGE_ANNOUNCE_ACK(Message))
+                                {
+                                    GameXender.Client.SendPacketToAllClients(Packet);
+                                }
                             }
                             else
                             {
-                                int Minutes = BanTime; // Assume BanTime is in minutes from UI
-                                BanHistory Ban = DaoManagerSQL.SaveBanHistory(Player.PlayerId, "MUTE", $"{Player.PlayerId}", DateTimeUtil.Now().AddMinutes(Minutes), Reason);
+                                int Seconds = BanTime;
+                                int DisplayMinutes = Seconds / 60;
+                                DateTime expiry = DateTimeUtil.Now().AddSeconds(Seconds);
+                                CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Mute Duration={Seconds} Sec ({DisplayMinutes} Min), Expiry={expiry.ToString("yyyy-MM-dd HH:mm:ss")}", LoggerType.Info);
+                                BanHistory Ban = DaoManagerSQL.SaveBanHistory(Player.PlayerId, "MUTE", $"{Player.PlayerId}", expiry, Reason);
                                 if (Ban != null)
                                 {
-                                    string Message = $"Player '{Player.Nickname}' has been muted for {Minutes} Minutes!";
+                                    string Message = $"Player '{Player.Nickname}' has been muted for {DisplayMinutes} Minutes!";
                                     using (PROTOCOL_SERVER_MESSAGE_ANNOUNCE_ACK Packet = new PROTOCOL_SERVER_MESSAGE_ANNOUNCE_ACK(Message))
                                     {
                                         GameXender.Client.SendPacketToAllClients(Packet);
                                     }
                                     ComDiv.UpdateDB("accounts", "ban_object_id", Ban.ObjectId, "player_id", Player.PlayerId);
                                     Player.BanObjectId = Ban.ObjectId;
+                                    CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Mute successful for {Player.PlayerId}. ObjectId={Ban.ObjectId}", LoggerType.Info);
                                     // Removed kick for mute
                                 }
                                 else
@@ -115,6 +136,7 @@ namespace Server.Game.Network.ServerPacket
                             {
                                 // Fix: If BanTime is less than a day, use minutes
                                 DateTime expiry = BanTime >= 1440 ? DateTimeUtil.Now().AddDays(BanTime / 1440) : DateTimeUtil.Now().AddMinutes(BanTime);
+                                CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Ban Duration={BanTime}, Expiry={expiry.ToString("yyyy-MM-dd HH:mm:ss")}", LoggerType.Info);
                                 BanHistory Ban = DaoManagerSQL.SaveBanHistory(Player.PlayerId, "DURATION", $"{Player.PlayerId}", expiry, Reason);
                                 if (Ban != null)
                                 {
@@ -126,8 +148,10 @@ namespace Server.Game.Network.ServerPacket
                                     }
                                     ComDiv.UpdateDB("accounts", "ban_object_id", Ban.ObjectId, "player_id", Player.PlayerId);
                                     Player.BanObjectId = Ban.ObjectId;
+                                    CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Ban successful for {Player.PlayerId}. ObjectId={Ban.ObjectId}", LoggerType.Info);
                                     if (Player.Connection != null)
                                     {
+                                        CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_ACK: Kicking online player {Player.PlayerId}", LoggerType.Info);
                                         Player.SendPacket(new PROTOCOL_AUTH_ACCOUNT_KICK_ACK(2), false);
                                         Player.Close(1000, true);
                                     }

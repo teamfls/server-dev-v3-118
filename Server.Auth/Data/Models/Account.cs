@@ -21,6 +21,7 @@ namespace Server.Auth.Data.Models
         public string Nickname;
         public string Password;
         public string Username;
+        public string Token;
         public string HardwareId;
         public string Email;
         public uint LastRankUpDate;

@@ -120,7 +120,7 @@ namespace Server.Auth.Data.Managers
                     switch (type)
                     {
                         case 0:
-                            command.CommandText = "SELECT * FROM accounts WHERE username=@valor LIMIT 1";
+                            command.CommandText = "SELECT * FROM accounts WHERE Token=@valor LIMIT 1";
                             break;
 
                         case 1:
@@ -132,13 +132,21 @@ namespace Server.Auth.Data.Managers
                             command.CommandText = "SELECT * FROM accounts WHERE username=@valor AND password=@valor2 LIMIT 1";
                             break;
                     }
+
+                    if (ConfigLoader.DebugMode)
+                        CLogger.Print($"[GetAccountDB] type={type}, valor='{valor}', valor2='{valor2}', SQL='{command.CommandText}'", LoggerType.Debug);
+
                     NpgsqlDataReader reader = command.ExecuteReader(CommandBehavior.Default);
+                    bool hasRows = reader.HasRows;
+                    if (ConfigLoader.DebugMode)
+                        CLogger.Print($"[GetAccountDB] HasRows={hasRows}", LoggerType.Debug);
                     while (reader.Read())
                     {
                         acc = new Account()
                         {
                             Username = SafeParseString(reader["username"]),
-                            Password = SafeParseString(reader["password"])
+                            Password = SafeParseString(reader["password"]),
+                            Token = SafeParseString(reader["Token"])
                         };
                         acc.SetPlayerId(SafeParseLong(reader["player_id"]), searchFlag);
                         acc.Email = SafeParseString(reader["email"]);

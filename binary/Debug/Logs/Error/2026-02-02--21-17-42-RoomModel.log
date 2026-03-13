@@ -1,4 +1,0 @@
-﻿2026-02-02 21:28:24 RespawnSync.Load: Index was outside the bounds of the array. 
-System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at Server.Match.Data.Models.RoomModel.RoundResetRoomF1(Int32 Round) in D:\Server\380 new team 7\Server.Match\Data\Models\RoomModel.cs:line 189
-   at Server.Match.Data.Sync.Client.RespawnSync.Load(SyncClientPacket packet) in D:\Server\380 new team 7\Server.Match\Data\Sync\Client\RespawnSync.cs:line 162

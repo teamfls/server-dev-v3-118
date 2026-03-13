@@ -363,3 +363,13 @@ FodyWeavers.xsd
 /packages
 [Pp]ackages/
 [Dd]ebug/
+binary/
+Logs/
+*.bin
+*.log
+*.txt
+*.exe
+*.pdb
+*.rar
+*.bat
+

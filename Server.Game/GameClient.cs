@@ -30,7 +30,22 @@ namespace Server.Game
         public int SessionId;
         public ushort SessionSeed;
         private ushort NextSessionSeed;
-        public int SessionShift, FirstPacketId;
+
+        // v108: CMessEncryptor keys replace SessionShift
+        public int FirstPacketId;
+        public int SessionMode;
+        public byte[] SessionKey1 = new byte[8];
+        public byte[] SessionKey2 = new byte[8];
+
+        /// <summary>Combines SessionKey1 + SessionKey2 into the 16-byte CMess key expected by Bitwise.</summary>
+        private byte[] GetSessionKey16()
+        {
+            byte[] key = new byte[16];
+            Array.Copy(SessionKey1, 0, key, 0, 8);
+            Array.Copy(SessionKey2, 0, key, 8, 8);
+            return key;
+        }
+
         private bool Disposed = false, connectionClosed = false;
         private readonly SafeHandle Handle = new SafeFileHandle(IntPtr.Zero, true);
 
@@ -80,10 +95,7 @@ namespace Server.Game
         {
             try
             {
-                if (Disposed)
-                {
-                    return;
-                }
+                if (Disposed) return;
                 Player = null;
                 if (Client != null)
                 {
@@ -108,7 +120,21 @@ namespace Server.Game
             try
             {
                 NextSessionSeed = SessionSeed;
-                SessionShift = ((SessionId + Bitwise.CRYPTO[0]) % 7 + 1);
+
+                // v108: CMessEncryptor key initialization
+                SessionMode = ((SessionId + Bitwise.CRYPTO[0]) % 3);
+
+                byte[] seed1 = BitConverter.GetBytes(SessionId ^ Bitwise.CRYPTO[1]);
+                byte[] seed2 = BitConverter.GetBytes(SessionId ^ Bitwise.CRYPTO[2]);
+
+                Array.Copy(seed1, 0, SessionKey1, 0, Math.Min(seed1.Length, 8));
+                Array.Copy(seed2, 0, SessionKey2, 0, Math.Min(seed2.Length, 8));
+
+                for (int i = seed1.Length; i < 8; i++)
+                    SessionKey1[i] = (byte)(SessionId >> (i % 4) & 0xFF);
+                for (int i = seed2.Length; i < 8; i++)
+                    SessionKey2[i] = (byte)(SessionSeed >> (i % 4) & 0xFF);
+
                 ThreadPool.QueueUserWorkItem(state => Connect());
                 ThreadPool.QueueUserWorkItem(state => ReadPacket());
                 ThreadPool.QueueUserWorkItem(state => CheckConnectionTimeout());
@@ -135,9 +161,7 @@ namespace Server.Game
             try
             {
                 if (Client != null && Client.RemoteEndPoint != null)
-                {
                     return (Client.RemoteEndPoint as IPEndPoint).Address.ToString();
-                }
                 return "";
             }
             catch
@@ -151,9 +175,7 @@ namespace Server.Game
             try
             {
                 if (Client != null && Client.RemoteEndPoint != null)
-                {
                     return (Client.RemoteEndPoint as IPEndPoint).Address;
-                }
                 return null;
             }
             catch
@@ -168,25 +190,36 @@ namespace Server.Game
         {
             try
             {
-                if (Data.Length < 4)
-                {
-                    return;
-                }
+                if (Data.Length < 4) return;
+
                 byte[] Logical = new byte[5];
                 byte[] Result = new byte[Data.Length + 1 + Logical.Length];
                 Array.Copy(Data, 0, Result, 0, Data.Length);
                 Array.Clear(Result, Data.Length, 1 + Logical.Length);
+
                 if (ConfigLoader.DebugMode)
                 {
                     ushort Opcode = BitConverter.ToUInt16(Result, 2);
                     string DebugData = Bitwise.ToByteString(Result);
                     CLogger.Print($"{PacketName}; Address: {Client.RemoteEndPoint}; Opcode: [{Opcode}]", LoggerType.Debug);
-                    //CLogger.Print(Bitwise.ToHexData($"Server Packet: [{Opcode}] | Secondary", Result), LoggerType.Opcode);
                 }
+
                 if (Result.Length > 0)
                 {
-                    byte[] FinalResult = Logical.Length == 3 ? Bitwise.Encrypt(Result, SessionShift) : Result;
-                    Client.BeginSend(FinalResult, 0, FinalResult.Length, SocketFlags.None, new AsyncCallback(SendCallback), Client);
+                    // v108: use CMessEncryptor
+                    byte[] FinalResult = Logical.Length == 3
+                        ? Bitwise.Encrypt(Result, GetSessionKey16(), SessionMode)
+                        : Result;
+
+                    if (FinalResult == null)
+                    {
+                        CLogger.Print($"SendCompletePacket: Encrypt returned null for {PacketName}", LoggerType.Warning);
+                        Close(0, true);
+                        return;
+                    }
+
+                    Client.BeginSend(FinalResult, 0, FinalResult.Length, SocketFlags.None,
+                        new AsyncCallback(SendCallback), Client);
                 }
                 Result = null;
             }
@@ -200,10 +233,7 @@ namespace Server.Game
         {
             try
             {
-                if (originalData.Length < 2)
-                {
-                    return;
-                }
+                if (originalData.Length < 2) return;
 
                 byte[] packetSize = BitConverter.GetBytes((ushort)(originalData.Length + 2));
                 byte[] newData = new byte[originalData.Length + packetSize.Length];
@@ -211,12 +241,11 @@ namespace Server.Game
                 Array.Copy(packetSize, 0, newData, 0, packetSize.Length);
                 Array.Copy(originalData, 0, newData, 2, originalData.Length);
 
-                byte[] packetData = new byte[newData.Length + 5]; //5 bytes para não encriptar
+                byte[] packetData = new byte[newData.Length + 5]; // 5 bytes to skip encryption
                 Array.Copy(newData, 0, packetData, 0, newData.Length);
 
                 if (ConfigLoader.DebugMode)
                 {
-                    // decode the opcode out of the data you’re actually sending:
                     ushort Opcode = BitConverter.ToUInt16(packetData, 2);
                     string DebugData = Bitwise.ToByteString(packetData);
                     CLogger.Print($"{PacketName}; Address: {Client.RemoteEndPoint}; Opcode: [{Opcode}]", LoggerType.Debug);
@@ -224,7 +253,8 @@ namespace Server.Game
 
                 if (Client != null && packetData.Length > 0)
                 {
-                    Client.BeginSend(packetData, 0, packetData.Length, SocketFlags.None, new AsyncCallback(SendCallback), Client);
+                    Client.BeginSend(packetData, 0, packetData.Length, SocketFlags.None,
+                        new AsyncCallback(SendCallback), Client);
                 }
                 packetData = null;
             }
@@ -241,10 +271,7 @@ namespace Server.Game
                 using (Packet)
                 {
                     byte[] originalData = Packet.GetBytes("GameClient.SendPacket");
-                    if (originalData.Length < 2)
-                    {
-                        return;
-                    }
+                    if (originalData.Length < 2) return;
 
                     byte[] packetSize = BitConverter.GetBytes((ushort)(originalData.Length + 2));
                     byte[] newData = new byte[originalData.Length + packetSize.Length];
@@ -252,12 +279,11 @@ namespace Server.Game
                     Array.Copy(packetSize, 0, newData, 0, packetSize.Length);
                     Array.Copy(originalData, 0, newData, 2, originalData.Length);
 
-                    byte[] packetData = new byte[newData.Length + 5]; //5 bytes para não encriptar
+                    byte[] packetData = new byte[newData.Length + 5]; // 5 bytes to skip encryption
                     Array.Copy(newData, 0, packetData, 0, newData.Length);
 
                     if (ConfigLoader.DebugMode)
                     {
-                        // extract the opcode from the packetData buffer
                         ushort Opcode = BitConverter.ToUInt16(packetData, 2);
                         string DebugData = Bitwise.ToByteString(packetData);
                         CLogger.Print($"[GAME] {Packet.GetType().Name}; Address: {Client.RemoteEndPoint}; Opcode: [{Opcode}]", LoggerType.Debug);
@@ -265,7 +291,8 @@ namespace Server.Game
 
                     if (Client != null && packetData.Length > 0)
                     {
-                        Client.BeginSend(packetData, 0, packetData.Length, SocketFlags.None, new AsyncCallback(SendCallback), Client);
+                        Client.BeginSend(packetData, 0, packetData.Length, SocketFlags.None,
+                            new AsyncCallback(SendCallback), Client);
                     }
                     Packet.Dispose();
                     packetData = null;
@@ -281,7 +308,9 @@ namespace Server.Game
         {
             try
             {
-                if (Result.AsyncState is Socket Handler && Handler.Connected)
+                // Fix CS8370: C# 7.3 compatible pattern
+                Socket Handler = Result.AsyncState as Socket;
+                if (Handler != null && Handler.Connected)
                 {
                     Handler.EndSend(Result);
                 }
@@ -299,9 +328,10 @@ namespace Server.Game
                 StateObject State = new StateObject()
                 {
                     WorkSocket = Client,
-                    Buffer = new byte[StateObject.BufferSize] // Initialize the buffer
+                    Buffer = new byte[StateObject.BufferSize]
                 };
-                Client.BeginReceive(State.Buffer, 0, StateObject.BufferSize, SocketFlags.None, new AsyncCallback(OnReceiveCallback), State);
+                Client.BeginReceive(State.Buffer, 0, StateObject.BufferSize, SocketFlags.None,
+                    new AsyncCallback(OnReceiveCallback), State);
             }
             catch
             {
@@ -318,11 +348,22 @@ namespace Server.Game
                 if (BytesCount > 0)
                 {
                     byte[] EcryptedPacket = new byte[BytesCount];
-                    Array.Copy(Packet.Buffer, 0, EcryptedPacket, 0, BytesCount); // Changed from Packet.TcpBuffer to Packet.Buffer
+                    Array.Copy(Packet.Buffer, 0, EcryptedPacket, 0, BytesCount);
+
                     int PacketLength = BitConverter.ToUInt16(EcryptedPacket, 0) & 0x7FFF;
                     byte[] BufferPacket = new byte[PacketLength];
                     Array.Copy(EcryptedPacket, 2, BufferPacket, 0, BufferPacket.Length);
-                    byte[] DecryptedPacket = Bitwise.Decrypt(BufferPacket, SessionShift);
+
+                    // v108: use CMessDecryptor
+                    byte[] DecryptedPacket = Bitwise.Decrypt(BufferPacket, GetSessionKey16(), SessionMode);
+
+                    if (DecryptedPacket == null)
+                    {
+                        CLogger.Print($"OnReceive: Decrypt failed (invalid padding) for IP: {GetIPAddress()}", LoggerType.Warning);
+                        Close(0, true);
+                        return;
+                    }
+
                     ushort PacketId = BitConverter.ToUInt16(DecryptedPacket, 0);
                     ushort PacketSeed = BitConverter.ToUInt16(DecryptedPacket, 2);
                     FirstPacketCheck(PacketId);
@@ -333,8 +374,7 @@ namespace Server.Game
                     }
                     else
                     {
-                        if (connectionClosed)
-                            return;
+                        if (connectionClosed) return;
 
                         ProcessPacket(PacketId, DecryptedPacket, "REQ");
                         Checkout(EcryptedPacket, PacketLength);
@@ -367,21 +407,32 @@ namespace Server.Game
             {
                 byte[] EcryptedPacket = new byte[BufferLength - FirstLength - 3];
                 Array.Copy(BufferTotal, FirstLength + 3, EcryptedPacket, 0, EcryptedPacket.Length);
-                if (EcryptedPacket.Length == 0)
-                {
-                    return;
-                }
+
+                if (EcryptedPacket.Length == 0) return;
+
                 int PacketLength = BitConverter.ToUInt16(EcryptedPacket, 0) & 0x7FFF;
                 byte[] BufferPacket = new byte[PacketLength];
                 Array.Copy(EcryptedPacket, 2, BufferPacket, 0, BufferPacket.Length);
-                byte[] DecryptedPacket = Bitwise.Decrypt(BufferPacket, SessionShift);
+
+                // v108: use CMessDecryptor
+                byte[] DecryptedPacket = Bitwise.Decrypt(BufferPacket, GetSessionKey16(), SessionMode);
+
+                if (DecryptedPacket == null)
+                {
+                    CLogger.Print($"Checkout: Decrypt failed (invalid padding) for IP: {GetIPAddress()}", LoggerType.Warning);
+                    Close(0, true);
+                    return;
+                }
+
                 ushort PacketId = BitConverter.ToUInt16(DecryptedPacket, 0);
                 ushort PacketSeed = BitConverter.ToUInt16(DecryptedPacket, 2);
+
                 if (!CheckSeed(PacketSeed, false))
                 {
                     Close(0, true);
                     return;
                 }
+
                 ProcessPacket(PacketId, DecryptedPacket, "REQ");
                 Checkout(EcryptedPacket, PacketLength);
             }
@@ -393,10 +444,7 @@ namespace Server.Game
 
         public void Close(int TimeMS, bool DestroyConnection, bool Kicked = false)
         {
-            if (connectionClosed)
-            {
-                return;
-            }
+            if (connectionClosed) return;
             try
             {
                 connectionClosed = true;
@@ -409,19 +457,16 @@ namespace Server.Game
                         Cache.SetOnlineStatus(false);
                         RoomModel Room = Cache.Room;
                         if (Room != null)
-                        {
                             Room.RemovePlayer(Cache, false, Kicked ? 1 : 0);
-                        }
+
                         MatchModel Match = Cache.Match;
                         if (Match != null)
-                        {
                             Match.RemovePlayer(Cache);
-                        }
+
                         ChannelModel Channel = Cache.GetChannel();
                         if (Channel != null)
-                        {
                             Channel.RemovePlayer(Cache);
-                        }
+
                         Cache.Status.ResetData(PlayerId);
                         AllUtils.SyncPlayerToFriends(Cache, false);
                         AllUtils.SyncPlayerToClanMembers(Cache);
@@ -431,9 +476,7 @@ namespace Server.Game
                     }
                     PlayerId = 0;
                     if (Client != null)
-                    {
                         Client.Close(TimeMS);
-                    }
                     Thread.Sleep(TimeMS);
                     Dispose();
                 }
@@ -465,8 +508,6 @@ namespace Server.Game
             }
             else
             {
-                // This is the crucial missing line: Update the tracker!
-                // This ensures the CheckConnectionTimeout logic sees a valid packet was received.
                 this.FirstPacketId = PacketId;
             }
         }
@@ -474,14 +515,13 @@ namespace Server.Game
         public bool CheckSeed(ushort PacketSeed, bool IsTheFirstPacket)
         {
             if (PacketSeed == GetNextSessionSeed())
-            {
                 return true;
-            }
+
             CLogger.Print($"Connection blocked. IP: {GetIPAddress()}; Date: {DateTimeUtil.Now()}; SessionId: {SessionId}; PacketSeed: {PacketSeed} / NextSessionSeed: {NextSessionSeed}; PrimarySeed: {SessionSeed}", LoggerType.Hack);
+
             if (IsTheFirstPacket)
-            {
                 ThreadPool.QueueUserWorkItem(state => ReadPacket());
-            }
+
             return false;
         }
 
@@ -548,8 +588,8 @@ namespace Server.Game
                     case 1055: packet = new PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ(); break;
                     case 1057: packet = new PROTOCOL_AUTH_GET_POINT_CASH_REQ(); break;
                     case 1061: packet = new PROTOCOL_AUTH_USE_ITEM_CHECK_NICK_REQ(); break;
-                    case 1076: packet = new PROTOCOL_SHOP_REPAIR_REQ(); break;
                     case 1075: packet = new PROTOCOL_AUTH_SHOP_EXTEND_REQ(); break;
+                    case 1076: packet = new PROTOCOL_SHOP_REPAIR_REQ(); break;
                     case 1084: packet = new PROTOCOL_AUTH_SHOP_USE_GIFTCOUPON_REQ(); break;
                     case 1087: packet = new PROTOCOL_AUTH_SHOP_ITEM_CHANGE_DATA_REQ(); break;
                     case 1097: packet = new PROTOCOL_SHOP_LIMITED_SALE_SYNC_REQ(); break;
@@ -589,6 +629,7 @@ namespace Server.Game
                     case 2378: packet = new PROTOCOL_BASE_USER_TITLE_EQUIP_REQ(); break;
                     case 2380: packet = new PROTOCOL_BASE_USER_TITLE_RELEASE_REQ(); break;
                     case 2384: packet = new PROTOCOL_BASE_CHATTING_REQ(); break;
+                    case 2392: packet = new PROTOCOL_2392_UNKNOWN_PACKET_REQ(); break;
                     case 2399: packet = new PROTOCOL_BASE_GAME_SERVER_STATE_REQ(); break;
                     case 2401: packet = new PROTOCOL_BASE_ENTER_PASS_REQ(); break;
                     case 2414: packet = new PROTOCOL_BASE_DAILY_RECORD_REQ(); break;
@@ -603,6 +644,7 @@ namespace Server.Game
                     case 2498: packet = new PROTOCOL_BASE_RANDOMBOX_LIST_REQ(); break;
                     case 2508: packet = new PROTOCOL_BASE_TICKET_UPDATE_REQ(); break;
                     case 2510: packet = new PROTOCOL_BASE_EVENT_PORTAL_REQ(); break;
+                    case 2518: packet = new PROTOCOL_2518_UNKNOWN_PACKET_REQ(); break;
 
                     // Lobby System
                     case 2561: packet = new PROTOCOL_LOBBY_LEAVE_REQ(); break;
@@ -613,6 +655,8 @@ namespace Server.Game
                     case 3329: packet = new PROTOCOL_INVENTORY_ENTER_REQ(); break;
                     case 3331: packet = new PROTOCOL_INVENTORY_LEAVE_REQ(); break;
                     case 3333: packet = new PROTOCOL_INVENTORY_UPGRADE_REQ(); break;
+
+                    // Room System
                     case 3585: packet = new PROTOCOL_ROOM_JOIN_REQ(); break;
                     case 3592: packet = new PROTOCOL_ROOM_CREATE_REQ(); break;
                     case 3596: packet = new PROTOCOL_ROOM_GET_PLAYERINFO_REQ(); break;
@@ -625,6 +669,7 @@ namespace Server.Game
                     case 3617: packet = new CheckRandomHostPacket(); break;
                     case 3619: packet = new PROTOCOL_ROOM_TOTAL_TEAM_CHANGE_REQ(); break;
                     case 3631: packet = new PROTOCOL_ROOM_GET_LOBBY_USER_LIST_REQ(); break;
+                    case 3635: packet = new PROTOCOL_BASE_UNKNOWN_3635_REQ(); break;
                     case 3639: packet = new PROTOCOL_ROOM_CHANGE_ROOMINFO_REQ(); break;
                     case 3643: packet = new PROTOCOL_GM_KICK_COMMAND_REQ(); break;
                     case 3647: packet = new PROTOCOL_GM_EXIT_COMMAND_REQ(); break;
@@ -648,6 +693,7 @@ namespace Server.Game
                     case 5133: packet = new PROTOCOL_BATTLE_GIVEUPBATTLE_REQ(); break;
                     case 5135: packet = new PROTOCOL_BATTLE_DEATH_REQ(); break;
                     case 5137: packet = new PROTOCOL_BATTLE_RESPAWN_REQ(); break;
+                    case 5145: break; // no-op
                     case 5146: packet = new PROTOCOL_BATTLE_SENDPING_REQ(); break;
                     case 5156: packet = new PROTOCOL_BATTLE_MISSION_BOMB_INSTALL_REQ(); break;
                     case 5158: packet = new PROTOCOL_BATTLE_MISSION_BOMB_UNINSTALL_REQ(); break;
@@ -660,6 +706,7 @@ namespace Server.Game
                     case 5188: packet = new PROTOCOL_BATTLE_MISSION_TUTORIAL_ROUND_END_REQ(); break;
                     case 5262: packet = new PROTOCOL_BATTLE_NEW_JOIN_ROOM_SCORE_REQ(); break;
                     case 5276: packet = new PROTOCOL_BATTLE_USER_SOPETYPE_REQ(); break;
+                    case 5292: packet = new PROTOCOL_BASE_UNKNOWN_PACKET_REQ(); break;
                     case 5377: packet = new PROTOCOL_LOBBY_QUICKJOIN_ROOM_REQ(); break;
 
                     // Character System
@@ -667,9 +714,12 @@ namespace Server.Game
                     case 6149: packet = new PROTOCOL_CHAR_CHANGE_EQUIP_REQ(); break;
                     case 6151: packet = new PROTOCOL_CHAR_DELETE_CHARA_REQ(); break;
 
+                    // GM Chat System
                     case 6657: packet = new PROTOCOL_GMCHAT_START_CHAT_REQ(); break;
                     case 6661: packet = new PROTOCOL_GMCHAT_END_CHAT_REQ(); break;
                     case 6663: packet = new PROTOCOL_GMCHAT_APPLY_PENALTY_REQ(); break;
+                    case 6667: packet = new PROTOCOL_GMCHAT_APPLY_PENALTY_MULTI_REQ(); break;
+
                     case 6965: packet = new PROTOCOL_CLAN_WAR_RESULT_REQ(); break;
                     case 7429: packet = new PROTOCOL_BATTLEBOX_AUTH_REQ(); break;
                     case 7681: packet = new PROTOCOL_MATCH_SERVER_IDX_REQ(); break;
@@ -678,19 +728,13 @@ namespace Server.Game
                     // Season System
                     case 8449: packet = new PROTOCOL_SEASON_CHALLENGE_INFO_REQ(); break;
                     case 8453: packet = new PROTOCOL_SEASON_CHALLENGE_BUY_SEASON_PASS_REQ(); break;
-                    case 2392: packet = new PROTOCOL_2392_UNKNOWN_PACKET_REQ(); break;
-                    case 2518: packet = new PROTOCOL_2518_UNKNOWN_PACKET_REQ(); break;
-                    case 3635: packet = new PROTOCOL_BASE_UNKNOWN_3635_REQ(); break;
-                    case 5145: break;
-                    case 5292: packet = new PROTOCOL_BASE_UNKNOWN_PACKET_REQ(); break;
 
                     default:
                         CLogger.Print(Bitwise.ToHexData($"Opcode Not Found: [{opcode}] | {direction}", packetData), LoggerType.Opcode);
                         break;
                 }
 
-                if (packet == null)
-                    return;
+                if (packet == null) return;
 
                 using (packet)
                 {

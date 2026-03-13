@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<List>
-    <Event Id="1" Begin="2509270000" Ended="2610272359" BoostType="Mode" BoostValue="0" BonusExp="5000" BonusGold="10000" Percent="10" Name="Point Blank" Description="Point Blank" Period="false" Priority="false"/>
-    <Event Id="2" Begin="2509270000" Ended="2610272359" BoostType="PcCafe" BoostValue="1" BonusExp="250" BonusGold="1000" Percent="10" Name="Point Blank" Description="Point Blank!" Period="false" Priority="false"/>
-    <Event Id="3" Begin="2509270000" Ended="2610272359" BoostType="PcCafe" BoostValue="2" BonusExp="500" BonusGold="5000" Percent="10" Name="Point Blank" Description="Point Blank" Period="false" Priority="false"/>
-</List>

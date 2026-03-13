@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Server.Auth.Network.ServerPacket.PROTOCOL_BASE_GET_SYSTEM_INFO_ACK
-// Assembly: Server.Auth, Version=1.1.25163.0, Culture=neutral, PublicKeyToken=null
-// MVID: D2254E5E-B0BA-4DE9-9720-2DDECE3CD4EF
-// Assembly location: C:\Users\home\Desktop\dll\Server.Auth-deobfuscated-Cleaned.dll
-
-using Plugin.Core.Managers;
+﻿using Plugin.Core.Managers;
 using Plugin.Core.Models;
 using Plugin.Core.Network;
 using Plugin.Core.Utility;
@@ -12,8 +6,6 @@ using Plugin.Core.XML;
 using Server.Auth.Data.Models;
 using Server.Auth.Data.XML;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
 
 namespace Server.Auth.Network.ServerPacket
 {
@@ -25,7 +17,6 @@ namespace Server.Auth.Network.ServerPacket
         private readonly EventPlaytimeModel Field3;
         private readonly string[] Field4;
 
-        
         public PROTOCOL_BASE_GET_SYSTEM_INFO_ACK(ServerConfig A_1)
         {
             this.Field0 = A_1;
@@ -37,8 +28,8 @@ namespace Server.Auth.Network.ServerPacket
             }
             this.Field4 = new string[2]
             {
-      "ded9a5bc68c44c6b885ac376be4f08c6",
-      "5c67549f9ea01f1c7429d2a6bb121844"
+                "ded9a5bc68c44c6b885ac376be4f08c6",
+                "5c67549f9ea01f1c7429d2a6bb121844"
             };
         }
 
@@ -102,7 +93,6 @@ namespace Server.Auth.Network.ServerPacket
             this.WriteC((byte)6);
         }
 
-        
         private byte[] Method0(List<SChannelModel> A_1)
         {
             using (SyncServerPacket syncServerPacket = new SyncServerPacket())

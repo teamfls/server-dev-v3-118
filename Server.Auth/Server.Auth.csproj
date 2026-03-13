@@ -99,6 +99,7 @@
     <Compile Include="AuthXender.cs" />
     <Compile Include="Network\AuthServerPacket.cs" />
     <Compile Include="Network\AuthClientPacket.cs" />
+    <Compile Include="Network\ClientPacket\PROTOCOL_BASE_TICK_REQ.cs" />
     <Compile Include="Network\ServerPacket\PROTOCOL_BASE_BATTLE_MODE_WEAPON_INFO_ACK.cs" />
     <Compile Include="Network\ServerPacket\PROTOCOL_BASE_MISSION_CARD_INFO_STREAM_ACK.cs" />
     <Compile Include="Network\ServerPacket\PROTOCOL_MATCH_CLAN_SEASON_ACK.cs" />

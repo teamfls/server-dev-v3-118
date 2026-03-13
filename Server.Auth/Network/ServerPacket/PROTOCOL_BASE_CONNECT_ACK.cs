@@ -1,43 +1,59 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Server.Auth.Network.ServerPacket.PROTOCOL_BASE_CONNECT_ACK
-// Assembly: Server.Auth, Version=1.1.25163.0, Culture=neutral, PublicKeyToken=null
-// MVID: D2254E5E-B0BA-4DE9-9720-2DDECE3CD4EF
-// Assembly location: C:\Users\home\Desktop\dll\Server.Auth-deobfuscated-Cleaned.dll
-
+﻿using Plugin.Core;
 using Plugin.Core.Utility;
+using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using Plugin.Core.Enums;
 
 namespace Server.Auth.Network.ServerPacket
 {
     public class PROTOCOL_BASE_CONNECT_ACK : AuthServerPacket
     {
-        private readonly int Field0;
-        private readonly ushort Field1;
-        private readonly List<byte[]> Field2;
+        private readonly int SessionId;
+        private readonly ushort SessionSeed;
+        private readonly byte[] Modulus;
+        private readonly byte[] Exponent;
 
-        public PROTOCOL_BASE_CONNECT_ACK(AuthClient A_1)
+        public PROTOCOL_BASE_CONNECT_ACK(AuthClient client)
         {
-            this.Field0 = A_1.SessionId;
-            this.Field1 = A_1.SessionSeed;
-            this.Field2 = Bitwise.GenerateRSAKeyPair(this.Field0, this.SECURITY_KEY, this.SEED_LENGTH);
+            this.SessionId = client.SessionId;
+            this.SessionSeed = client.SessionSeed;
+
+            byte[] privateKeyObj;
+            Bitwise.GenerateRSAKeyPairRaw(1360, out Modulus, out Exponent, out privateKeyObj);
+            client.RSAPrivateKey = privateKeyObj;
+
+            byte[] sharedKey = new byte[16];
+            Array.Copy(Modulus, 16, sharedKey, 0, 16);
+
+            client.CMessEncryptKey = sharedKey; 
+            client.CMessDecryptKey = sharedKey; 
+            client.IsCMessReady = false;
+
+            if (ConfigLoader.DebugMode)
+            {
+                Console.WriteLine("\n[+] ====== CONNECT_ACK SENT ======");
+                Console.WriteLine($"[+] SessionId   : {this.SessionId}");
+                Console.WriteLine($"[+] RSA Modulus : {Modulus.Length} bytes");
+                Console.WriteLine($"[+] SharedKey   : {BitConverter.ToString(sharedKey).Replace("-", " ")}");
+                Console.WriteLine("==================================\n");
+            }
         }
 
-        
         public override void Write()
         {
-            this.WriteH((short)2306);
-            this.WriteH((short)0);
-            this.WriteC((byte)11);
-            this.WriteB(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, });
-            this.WriteH((ushort)(this.Field2[0].Length + this.Field2[1].Length + 2));
-            this.WriteH((ushort)this.Field2[0].Length);
-            this.WriteB(this.Field2[0]);
-            this.WriteB(this.Field2[1]);
-            this.WriteC((byte)3);
-            this.WriteH((short)80);
-            this.WriteH(this.Field1);
-            this.WriteD(this.Field0);
+            WriteH((short)2306);
+            WriteH((short)0);
+            WriteC((byte)11);
+            WriteB(new byte[11]);
+            WriteH((ushort)(Modulus.Length + Exponent.Length));
+            WriteH((ushort)Modulus.Length);
+            WriteB(Modulus);
+            WriteB(Exponent);
+            WriteH((short)117);
+            WriteC((byte)0);
+            WriteH(SessionSeed);
+            WriteD(SessionId);
+            CLogger.Print($"[+] CONNECT_ACK: SessionId={SessionId}, SessionSeed={SessionSeed}, Modulus={Modulus.Length}b", LoggerType.Debug);
         }
     }
 }

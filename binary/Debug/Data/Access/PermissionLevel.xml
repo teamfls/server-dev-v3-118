@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<List>
-	<Permission Key="0" 	Name="NORMAL" 		Description="Access level for Normal Users"		FakeRank="255"/>
-	<Permission Key="50" 	Name="MODERATOR" 	Description="Access level for MOD (Moderator)"	FakeRank="59"/>
-	<Permission Key="100" 	Name="GAMEMASTER" 	Description="Access level for GM (GameMaster)"	FakeRank="58"/>
-</List>

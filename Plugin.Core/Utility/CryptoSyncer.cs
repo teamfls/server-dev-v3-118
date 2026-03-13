@@ -30,6 +30,7 @@ namespace Plugin.Core.Utility
         //    0x30, 0x76, 0x6C, 0x72,
         //    0x4D, 0x4E, 0x6C, 0x6D 
         //};
+
         private static readonly byte[] EncryptionKey = new byte[]
         {
             0x1F, 0x8A, 0xE9, 0xC0,

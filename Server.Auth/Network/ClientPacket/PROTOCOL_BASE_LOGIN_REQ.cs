@@ -21,6 +21,7 @@ namespace Server.Auth.Network.ClientPacket
 {
     /// <summary>
     /// Maneja la petición de login del cliente al servidor de autenticación
+    /// v108: SC_VERSION layout changed, new S2MOValue<uchar> field added
     /// </summary>
     public class PROTOCOL_BASE_LOGIN_REQ : AuthClientPacket
     {
@@ -32,6 +33,7 @@ namespace Server.Auth.Network.ClientPacket
         private byte _verificationByte4;
         private string _username;
         private string _password;
+        private string _token;
         private string _clientVersion;
         private string _ipAddress;
         private string _screenResolution;
@@ -48,29 +50,51 @@ namespace Server.Auth.Network.ClientPacket
         {
             try
             {
-                if (this._raw != null)
-                {
-                    CLogger.Print(Bitwise.ToHexData("LOGIN_REQ", this._raw), LoggerType.Info);
-                }
-
                 _verificationByte1 = ReadC();
                 _verificationByte2 = ReadC();
                 _verificationByte3 = ReadC();
                 _verificationByte4 = ReadC();
+                ReadC();
                 byte[] macBytes = ReadB(6);
                 _macAddress = new PhysicalAddress(macBytes);
-                ReadB(20); 
+                ReadB(20);
                 _screenResolution = $"{ReadH()}x{ReadH()}";
-                ReadB(9);  
+                ReadB(10);
                 _userFileList = ReadS(ReadC());
-                ReadB(16); 
+                ReadB(16);
                 _clientLocale = (ClientLocale)ReadC();
-                _clientVersion = $"{ReadC()}.{ReadH()}";
-                ReadH(); 
-                _password = ReadS(ReadC());
-                _username = ReadS(ReadC());
-                _ipAddress = Client.GetIPAddress();
 
+               
+                ushort versionMinor = (ushort)ReadH(); 
+                ReadC();                                
+                _clientVersion = $"{versionMinor}.0";  
+
+                _token = ReadS(ReadH());
+                _ipAddress = Client.GetIPAddress();
+                ReadB(4);
+
+                
+                string rawToken = _token ?? string.Empty;
+                string decoded = rawToken;
+                try
+                {
+                    byte[] tokenBytes = Convert.FromBase64String(rawToken);
+                    decoded = System.Text.Encoding.UTF8.GetString(tokenBytes);
+                }
+                catch { }
+
+                int sep = decoded.IndexOf(':');
+                if (sep > 0)
+                {
+                    _username = decoded.Substring(0, sep);
+                    _password = decoded.Substring(sep + 1);
+                }
+                else
+                {
+                    
+                    _username = decoded;
+                    _password = rawToken;
+                }
             }
             catch (Exception ex)
             {
@@ -98,49 +122,56 @@ namespace Server.Auth.Network.ClientPacket
 
                 string clientKey = Client.GetIPAddress();
 
+                // --- Anti spam: blokir percobaan login < 1 detik ---
                 lock (_lockObject)
                 {
-                    // Verificar si hay un intento reciente (menos de 1 segundo)
                     if (_lastLoginAttempts.ContainsKey(clientKey))
                     {
                         var timeDiff = DateTime.Now - _lastLoginAttempts[clientKey];
                         if (timeDiff.TotalMilliseconds < 1000)
                         {
-                            Console.WriteLine($"Duplicate login attempt blocked for {clientKey}");
+                            CLogger.Print($"Duplicate login attempt blocked for {clientKey}", LoggerType.Warning);
                             Client.Close(1000, false);
                             return;
                         }
                     }
-
                     _lastLoginAttempts[clientKey] = DateTime.Now;
                 }
 
-                // Verificar bytes de autenticación
-                uint verificationKey = ComDiv.Verificate(_verificationByte1, _verificationByte2, _verificationByte3, _verificationByte4);
+                // --- Verifikasi bytes autentikasi ---
+                uint verificationKey = ComDiv.Verificate(
+                    _verificationByte1,
+                    _verificationByte2,
+                    _verificationByte3,
+                    _verificationByte4
+                );
 
                 if (verificationKey == 0U)
                 {
+                    CLogger.Print($"Invalid verification bytes for IP: {clientKey}", LoggerType.Warning);
                     Client.Close(1000, false);
                     return;
                 }
 
-                // Encriptar contraseña si está configurado
+                // --- Enkripsi password jika dikonfigurasi ---
                 if (ConfigLoader.UseCryptedPassword)
                     _password = Bitwise.HashString(_password, ConfigLoader.CryptedPasswordSalt);
 
+                if (ConfigLoader.DebugMode)
+                    CLogger.Print($"[LOGIN] username='{_username}', password='{_password}', token='{_token}', crypted={ConfigLoader.UseCryptedPassword}", LoggerType.Debug);
                 ServerConfig config = AuthXender.Client.Config;
 
-                // Validaciones iniciales
+                // --- Validasi awal ---
                 if (!ValidateInitialRequirements(config))
                 {
                     HandleInitialValidationFailure(config);
                     return;
                 }
 
-                // Obtener cuenta de la base de datos (buscar por username y password)
+                // --- Ambil akun dari database ---
                 Account player = Client.Player = AccountManager.GetAccountDB(_username, _password, 2, 95);
 
-                // Crear cuenta automáticamente si no existe y está habilitado
+                // --- Auto create account jika tidak ada ---
                 if (player == null && ConfigLoader.AutoAccount)
                 {
                     if (!AccountManager.CreateAccount(out player, _username, _password))
@@ -155,7 +186,7 @@ namespace Server.Auth.Network.ClientPacket
                     CLogger.Print($"Account created automatically [{_username}]", LoggerType.Info);
                 }
 
-                // Validar cuenta y procesar login
+                // --- Proses login ---
                 if (player != null)
                 {
                     ProcessLogin(player, config, verificationKey);
@@ -176,7 +207,7 @@ namespace Server.Auth.Network.ClientPacket
         #region Validation Methods
 
         /// <summary>
-        /// Valida los requisitos iniciales del cliente
+        /// Validasi kebutuhan awal client sebelum proses login
         /// </summary>
         private bool ValidateInitialRequirements(ServerConfig config)
         {
@@ -195,6 +226,7 @@ namespace Server.Auth.Network.ClientPacket
             if (_macAddress.GetAddressBytes().SequenceEqual(new byte[6]))
                 return false;
 
+            // v108: format version adalah "108" (bukan "3.80" seperti v80)
             if (_clientVersion != config.ClientVersion)
                 return false;
 
@@ -208,19 +240,18 @@ namespace Server.Auth.Network.ClientPacket
         }
 
         /// <summary>
-        /// Maneja el fallo de validación inicial
+        /// Handle kegagalan validasi awal
         /// </summary>
         private void HandleInitialValidationFailure(ServerConfig config)
         {
             string errorMessage = GetValidationErrorMessage(config);
-
             Client.SendPacket(new PROTOCOL_SERVER_MESSAGE_DISCONNECTIONSUCCESS_ACK(2147483904U, false));
             CLogger.Print(errorMessage, LoggerType.Warning);
             Client.Close(1000, true);
         }
 
         /// <summary>
-        /// Obtiene el mensaje de error de validación apropiado
+        /// Dapatkan pesan error validasi yang sesuai
         /// </summary>
         private string GetValidationErrorMessage(ServerConfig config)
         {
@@ -245,8 +276,9 @@ namespace Server.Auth.Network.ClientPacket
             if (_macAddress.GetAddressBytes().SequenceEqual(new byte[6]))
                 return $"Invalid MAC Address [{_username}]";
 
+            // v108: version format "108"
             if (_clientVersion != config.ClientVersion)
-                return $"Version: {_clientVersion} not supported [{_username}]";
+                return $"Version: {_clientVersion} not supported (expected: {config.ClientVersion}) [{_username}]";
 
             if (config.AccessUFL && _userFileList != config.UserFileList)
                 return $"UserFileList: {_userFileList} not supported [{_username}]";
@@ -254,7 +286,7 @@ namespace Server.Auth.Network.ClientPacket
             if (_screenResolution.Equals("0x0") || ResolutionJSON.GetDisplay(_screenResolution).Equals("Invalid"))
                 return $"Invalid {_screenResolution} resolution [{_username}]";
 
-            return "There is something wrong happened when trying to login " + _username;
+            return $"Unknown validation error [{_username}]";
         }
 
         #endregion Validation Methods
@@ -262,16 +294,15 @@ namespace Server.Auth.Network.ClientPacket
         #region Login Processing Methods
 
         /// <summary>
-        /// Procesa el login del jugador después de validar credenciales
+        /// Proses login setelah validasi kredensial berhasil
         /// </summary>
         private void ProcessLogin(Account player, ServerConfig config, uint verificationKey)
         {
-            // ✅ PERBAIKAN 1: Cek ban aktif dari database terlebih dahulu
+            // Cek ban aktif dari database
             BanHistory activeBan = DaoManagerSQL.GetActiveBanForPlayer(player.PlayerId);
 
             if (activeBan != null && activeBan.EndDate > DateTimeUtil.Now())
             {
-                // Update BanObjectId jika belum sinkron
                 if (player.BanObjectId != activeBan.ObjectId)
                 {
                     player.BanObjectId = activeBan.ObjectId;
@@ -284,7 +315,7 @@ namespace Server.Auth.Network.ClientPacket
                 return;
             }
 
-            // Verificar si la cuenta está baneada (backup check)
+            // Backup check: cek ban permanen
             if (player.IsBanned())
             {
                 Client.SendPacket(new PROTOCOL_BASE_LOGIN_ACK(EventErrorEnum.EVENT_LOG_IN_BLOCK_ACCOUNT, player, 0U));
@@ -293,18 +324,21 @@ namespace Server.Auth.Network.ClientPacket
                 return;
             }
 
-            // Actualizar dirección MAC si cambió
+            // Update MAC address jika berubah
             if (player.MacAddress != _macAddress)
                 ComDiv.UpdateDB("accounts", "mac_address", _macAddress, "player_id", player.PlayerId);
 
-            // Verificar bans de MAC e IP
+            // Cek ban MAC dan IP
             bool isMacBanned;
             bool isIpBanned;
             DaoManagerSQL.GetBanStatus($"{_macAddress}", _ipAddress, out isMacBanned, out isIpBanned);
 
             if (isMacBanned || isIpBanned)
             {
-                CLogger.Print($"{(isMacBanned ? "MAC Address blocked" : "IP4 Address blocked")} [{player.Username}]", LoggerType.Warning);
+                CLogger.Print(
+                    $"{(isMacBanned ? "MAC Address blocked" : "IP4 Address blocked")} [{player.Username}]",
+                    LoggerType.Warning
+                );
                 Client.SendPacket(new PROTOCOL_BASE_LOGIN_ACK(
                     isIpBanned ? EventErrorEnum.LOGIN_BLOCK_IP : EventErrorEnum.EVENT_LOG_IN_BLOCK_ACCOUNT,
                     player,
@@ -314,8 +348,9 @@ namespace Server.Auth.Network.ClientPacket
                 return;
             }
 
-            // Verificar nivel de acceso
-            bool hasAccess = (player.IsGM() && config.OnlyGM) || (player.AuthLevel() >= AccessLevel.NORMAL && !config.OnlyGM);
+            // Cek level akses
+            bool hasAccess = (player.IsGM() && config.OnlyGM) ||
+                             (player.AuthLevel() >= AccessLevel.NORMAL && !config.OnlyGM);
 
             if (!hasAccess)
             {
@@ -325,17 +360,17 @@ namespace Server.Auth.Network.ClientPacket
                 return;
             }
 
-            // Obtener cuenta desde el manager
+            // Ambil cached account
             Account cachedAccount = AccountManager.GetAccount(player.PlayerId, true);
 
-            // Verificar si ya está online
+            // Cek apakah sudah online
             if (player.IsOnline)
             {
                 HandleAlreadyOnline(player, cachedAccount);
                 return;
             }
 
-            // ✅ PERBAIKAN 2: Verificar ban temporal activo dengan null check
+            // Cek ban temporal aktif
             if (player.BanObjectId > 0)
             {
                 BanHistory banInfo = DaoManagerSQL.GetAccountBan(player.BanObjectId);
@@ -349,12 +384,12 @@ namespace Server.Auth.Network.ClientPacket
                 }
             }
 
-            // Login exitoso
+            // Login berhasil
             CompleteSuccessfulLogin(player, cachedAccount, verificationKey);
         }
 
         /// <summary>
-        /// Maneja el caso cuando la cuenta ya está online
+        /// Handle kasus akun sudah online
         /// </summary>
         private void HandleAlreadyOnline(Account player, Account cachedAccount)
         {
@@ -363,7 +398,6 @@ namespace Server.Auth.Network.ClientPacket
 
             if (cachedAccount != null && cachedAccount.Connection != null)
             {
-                // Desconectar la sesión anterior
                 cachedAccount.SendPacket(new PROTOCOL_AUTH_ACCOUNT_KICK_ACK(1));
                 cachedAccount.SendPacket(new PROTOCOL_SERVER_MESSAGE_ERROR_ACK(2147487744U));
                 cachedAccount.Close(1000);
@@ -377,68 +411,63 @@ namespace Server.Auth.Network.ClientPacket
         }
 
         /// <summary>
-        /// Completa el proceso de login exitoso
+        /// Selesaikan proses login yang berhasil
         /// </summary>
         private void CompleteSuccessfulLogin(Account player, Account cachedAccount, uint verificationKey)
         {
-            // Update country flag jika belum ada
+            // Update country flag
             FlagCountryLATAM();
 
-            // Establecer player ID con flags
+            // Set player ID dengan flags
             player.SetPlayerId(player.PlayerId, 8159);
 
-            // Enviar confirmación de login exitoso
+            // Kirim konfirmasi login berhasil
             Client.SendPacket(new PROTOCOL_BASE_LOGIN_ACK(
                 EventErrorEnum.SUCCESS,
                 player,
                 AllUtils.ValidateKey(player.PlayerId, Client.SessionId, verificationKey)
             ));
 
-            // Enviar información de cash/puntos
+            // Kirim info cash/points
             Client.SendPacket(new PROTOCOL_AUTH_GET_POINT_CASH_ACK(0U, player));
 
-            // Cargar información del clan si pertenece a uno
+            // Load info clan jika ada
             if (player.ClanId > 0)
             {
                 player.ClanPlayers = ClanManager.GetClanPlayers(player.ClanId, player.PlayerId);
                 Client.SendPacket(new PROTOCOL_CS_MEMBER_INFO_ACK(player.ClanPlayers));
             }
 
-            // Actualizar estado del jugador
+            // Update status player
             player.Status.SetData(uint.MaxValue, player.PlayerId);
             player.Status.UpdateServer(0);
             player.SetOnlineStatus(true);
 
-            // Actualizar conexión en cuenta cacheada
+            // Update koneksi di cached account
             if (cachedAccount != null)
                 cachedAccount.Connection = Client;
 
-            // Iniciar heartbeat y refrescar
+            // Mulai heartbeat
             Client.HeartBeatCounter();
             SendRefresh.RefreshAccount(player, true);
+
+            CLogger.Print($"Login successful [{player.Username}] IP: {_ipAddress}", LoggerType.Info);
         }
 
         /// <summary>
-        /// Maneja credenciales inválidas
+        /// Handle kredensial tidak valid
         /// </summary>
         private void HandleInvalidCredentials(Account player)
         {
-            string errorMessage = "";
-            EventErrorEnum errorCode = EventErrorEnum.FAIL;
-
-            if (player == null)
-            {
-                errorMessage = "Invalid username or password";
-                errorCode = EventErrorEnum.LOGIN_ID_PASS_INCORRECT;
-            }
-            else
-            {
-                errorMessage = "Invalid password";
-                errorCode = EventErrorEnum.LOGIN_ID_PASS_INCORRECT;
-            }
+            EventErrorEnum errorCode = EventErrorEnum.LOGIN_ID_PASS_INCORRECT;
 
             Client.SendPacket(new PROTOCOL_BASE_LOGIN_ACK(errorCode, player, 0U));
-            CLogger.Print($"{errorMessage} [{_username}]", LoggerType.Warning);
+            CLogger.Print(
+                player == null
+                    ? $"Invalid username or password [{_username}]"
+                    : $"Invalid password [{_username}]",
+                LoggerType.Warning
+            );
             Client.Close(1000, false);
         }
 
@@ -461,13 +490,9 @@ namespace Server.Auth.Network.ClientPacket
                     return false;
                 }
 
-                // Cek apakah sudah ada country_flags yang valid (bukan 0)
                 if (p.CountryFlags > 0)
-                {
-                    return true; // Sudah ada flag, tidak perlu update
-                }
+                    return true;
 
-                // Dapatkan info IP
                 acs = IPK.GetIpInfo(Client.GetAddress());
 
                 if (acs == null || string.IsNullOrEmpty(acs.country))
@@ -476,80 +501,39 @@ namespace Server.Auth.Network.ClientPacket
                     return false;
                 }
 
-                int countryFlag = 0;
-
+                int countryFlag;
                 switch (acs.country)
                 {
-                    case "Venezuela":
-                        countryFlag = 1;
-                        break;
-                    case "Peru":
-                        countryFlag = 2;
-                        break;
-                    case "Chile":
-                        countryFlag = 3;
-                        break;
-                    case "Ecuador":
-                        countryFlag = 4;
-                        break;
-                    case "Bolivia":
-                        countryFlag = 5;
-                        break;
-                    case "Argentina":
-                        countryFlag = 6;
-                        break;
-                    case "Mexico":
-                        countryFlag = 7;
-                        break;
-                    case "United States":
-                        countryFlag = 8;
-                        break;
-                    case "Spain":
-                        countryFlag = 9;
-                        break;
-                    case "France":
-                        countryFlag = 10;
-                        break;
-                    case "Colombia":
-                        countryFlag = 11;
-                        break;
-                    case "Paraguay":
-                        countryFlag = 12;
-                        break;
-                    case "Dominican Republic":
-                        countryFlag = 13;
-                        break;
-                    case "Puerto Rico":
-                        countryFlag = 14;
-                        break;
-                    case "Uruguay":
-                        countryFlag = 15;
-                        break;
-                    case "Trinidad and Tobago":
-                        countryFlag = 16;
-                        break;
-                    case "Portugal":
-                        countryFlag = 17;
-                        break;
-                    case "Italy":
-                        countryFlag = 18;
-                        break;
-                    case "Canada":
-                        countryFlag = 19;
-                        break;
-                    case "Honduras":
-                        countryFlag = 20;
-                        break;
-                    default:
-                        countryFlag = 0;
-                        break;
+                    case "Venezuela": countryFlag = 1; break;
+                    case "Peru": countryFlag = 2; break;
+                    case "Chile": countryFlag = 3; break;
+                    case "Ecuador": countryFlag = 4; break;
+                    case "Bolivia": countryFlag = 5; break;
+                    case "Argentina": countryFlag = 6; break;
+                    case "Mexico": countryFlag = 7; break;
+                    case "United States": countryFlag = 8; break;
+                    case "Spain": countryFlag = 9; break;
+                    case "France": countryFlag = 10; break;
+                    case "Colombia": countryFlag = 11; break;
+                    case "Paraguay": countryFlag = 12; break;
+                    case "Dominican Republic": countryFlag = 13; break;
+                    case "Puerto Rico": countryFlag = 14; break;
+                    case "Uruguay": countryFlag = 15; break;
+                    case "Trinidad and Tobago": countryFlag = 16; break;
+                    case "Portugal": countryFlag = 17; break;
+                    case "Italy": countryFlag = 18; break;
+                    case "Canada": countryFlag = 19; break;
+                    case "Honduras": countryFlag = 20; break;
+                    default: countryFlag = 0; break;
                 }
 
-                // Update ke database dan memory
                 if (ComDiv.UpdateDB("accounts", "country_flags", countryFlag, "player_id", p.PlayerId))
                 {
                     p.CountryFlags = countryFlag;
-                    CLogger.Print($"Country flag updated to {countryFlag} ({acs.country}) for player {p.PlayerId}", LoggerType.Info);
+                    CLogger.Print(
+                        $"Country flag updated to {countryFlag} ({acs.country}) for player {p.PlayerId}",
+                        LoggerType.Info
+                    );
                 }
 
                 return true;

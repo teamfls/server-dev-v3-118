@@ -1,5 +1,6 @@
 ﻿using Plugin.Core;
 using Plugin.Core.Enums;
+using Plugin.Core.Utility;
 using Server.Game.Data.Managers;
 using Server.Game.Data.Models;
 using Server.Game.Network.ServerPacket;
@@ -14,7 +15,13 @@ namespace Server.Game.Network.ClientPacket
         private byte Type;
         private string Reason;
         public override void Read()
+        
         {
+            if (this._raw != null)
+            {
+                CLogger.Print(Bitwise.ToHexData("GM_APPLY_PENALTY_REQ", this._raw), LoggerType.Info);
+            }
+
             try
             {
                 MStream.Seek(0, System.IO.SeekOrigin.Begin);
@@ -45,7 +52,8 @@ namespace Server.Game.Network.ClientPacket
                 {
                     return;
                 }
-                CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_REQ: From={Player.Nickname}, TargetId={PlayerId}, Type={Type}, BanTime={BanTime}, Reason={Reason}", LoggerType.Info);
+                string durText = (Type == 0 || Type == 1) ? $"{BanTime / 60} Min ({BanTime} Sec)" : $"{BanTime} Min";
+                CLogger.Print($"PROTOCOL_GMCHAT_APPLY_PENALTY_REQ: From={Player.Nickname}, TargetId={PlayerId}, Type={Type}, Duration={durText}, Reason={Reason}", LoggerType.Info);
                 Account TargetUser = AccountManager.GetAccount(PlayerId, 31);
                 if (TargetUser != null)
                 {
