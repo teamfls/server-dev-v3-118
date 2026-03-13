@@ -1,0 +1,16 @@
+﻿2026-03-11 15:33:39 Unable to read beyond the end of the stream. 
+System.IO.EndOfStreamException: Unable to read beyond the end of the stream.
+   at System.IO.__Error.EndOfFile()
+   at System.IO.BinaryReader.ReadByte()
+   at Plugin.Core.Network.BaseClientPacket.ReadC() in D:\Server\380 new team 12\Plugin.Core\Network\BaseClientPacket.cs:line 34
+   at Server.Auth.Network.ClientPacket.PROTOCOL_BASE_LOGIN_REQ.Read() in D:\Server\380 new team 12\Server.Auth\Network\ClientPacket\PROTOCOL_BASE_LOGIN_REQ.cs:line 102
+   at Server.Auth.Network.AuthClientPacket.Makeme(AuthClient Client, Byte[] Buffer) in D:\Server\380 new team 12\Server.Auth\Network\AuthClientPacket.cs:line 32
+   at Server.Auth.AuthClient.RunPacket(UInt16 Opcode, Byte[] Buffer, String Value) in D:\Server\380 new team 12\Server.Auth\AuthClient.cs:line 502
+2026-03-11 15:34:50 Unable to read beyond the end of the stream. 
+System.IO.EndOfStreamException: Unable to read beyond the end of the stream.
+   at System.IO.__Error.EndOfFile()
+   at System.IO.BinaryReader.ReadByte()
+   at Plugin.Core.Network.BaseClientPacket.ReadC() in D:\Server\380 new team 12\Plugin.Core\Network\BaseClientPacket.cs:line 34
+   at Server.Auth.Network.ClientPacket.PROTOCOL_BASE_LOGIN_REQ.Read() in D:\Server\380 new team 12\Server.Auth\Network\ClientPacket\PROTOCOL_BASE_LOGIN_REQ.cs:line 102
+   at Server.Auth.Network.AuthClientPacket.Makeme(AuthClient Client, Byte[] Buffer) in D:\Server\380 new team 12\Server.Auth\Network\AuthClientPacket.cs:line 32
+   at Server.Auth.AuthClient.RunPacket(UInt16 Opcode, Byte[] Buffer, String Value) in D:\Server\380 new team 12\Server.Auth\AuthClient.cs:line 502

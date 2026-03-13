@@ -1,0 +1,15 @@
+﻿2026-03-11 06:32:21 The I/O operation has been aborted because of either a thread exit or an application request 
+System.Net.Sockets.SocketException (0x80004005): The I/O operation has been aborted because of either a thread exit or an application request
+   at System.Net.Sockets.Socket.EndReceiveFrom(IAsyncResult asyncResult, EndPoint& endPoint)
+   at System.Net.Sockets.UdpClient.EndReceive(IAsyncResult asyncResult, IPEndPoint& remoteEP)
+   at Server.Game.Data.Sync.GameSync.AcceptCallback(IAsyncResult Result) in D:\Server\380 new team 12\Server.Game\Data\Sync\GameSync.cs:line 64
+2026-03-11 06:32:21 The I/O operation has been aborted because of either a thread exit or an application request 
+System.Net.Sockets.SocketException (0x80004005): The I/O operation has been aborted because of either a thread exit or an application request
+   at System.Net.Sockets.Socket.EndReceiveFrom(IAsyncResult asyncResult, EndPoint& endPoint)
+   at System.Net.Sockets.UdpClient.EndReceive(IAsyncResult asyncResult, IPEndPoint& remoteEP)
+   at Server.Game.Data.Sync.GameSync.AcceptCallback(IAsyncResult Result) in D:\Server\380 new team 12\Server.Game\Data\Sync\GameSync.cs:line 64
+2026-03-11 06:32:21 The I/O operation has been aborted because of either a thread exit or an application request 
+System.Net.Sockets.SocketException (0x80004005): The I/O operation has been aborted because of either a thread exit or an application request
+   at System.Net.Sockets.Socket.EndReceiveFrom(IAsyncResult asyncResult, EndPoint& endPoint)
+   at System.Net.Sockets.UdpClient.EndReceive(IAsyncResult asyncResult, IPEndPoint& remoteEP)
+   at Server.Game.Data.Sync.GameSync.AcceptCallback(IAsyncResult Result) in D:\Server\380 new team 12\Server.Game\Data\Sync\GameSync.cs:line 64

@@ -1,0 +1,23 @@
+﻿2026-03-11 20:10:15 [+] CONNECT_ACK: SessionId=1, SessionSeed=0, Modulus=170b
+2026-03-11 20:10:15 [AUTH] PROTOCOL_BASE_CONNECT_ACK; Address: 127.0.0.1:6654; Opcode: [2306]
+2026-03-11 20:10:15 +--------+-------------------------------------------------+----------------+
+[!] RAW RECV [123 bytes]; Length: [123 Bytes] </>
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F |
++--------+-------------------------------------------------+----------------+
+|00000000| 78 80 05 10 91 03 4F C4 86 56 97 55 4B 62 FC F0 |x.....O..V.UKb..|
+|00000010| 00 B6 70 C4 68 35 5D 12 A3 77 4B 96 35 2B 48 5E |..p.h5]..wK.5+H^|
+|00000020| A7 69 A5 9A 15 05 AC F4 60 19 3D CA 6E 9A 1F 9D |.i......`.=.n...|
+|00000030| 00 1B BB DF 7B D7 27 63 55 E5 2D 12 74 EE F5 DB |....{.'cU.-.t...|
+|00000040| 47 A5 19 DD C2 19 27 21 5F B4 B2 4E 01 2E 54 F0 |G.....'!_..N..T.|
+|00000050| 39 DA 77 C9 95 13 65 A0 80 E1 C2 D6 AA 5E 61 F3 |9.w...e......^a.|
+|00000060| 2E 52 F8 AD 0B 79 BD 78 89 FD E4 CA B9 AE DF 33 |.R...y.x.......3|
+|00000070| 12 47 7F 03 77 43 71 10 EC 62 00                |.G..wCq..b.     |
++--------+-------------------------------------------------+----------------+
+2026-03-11 20:10:15 [AUTH] PROTOCOL_BASE_LOGIN_REQ; Address: 127.0.0.1:6654; Opcode: [1281]
+2026-03-11 20:10:15 [LOGIN] CMess key not updated (no valid key detected)
+2026-03-11 20:10:15 [LOGIN] username='admin2', password='admin2', token='admin2', crypted=False
+2026-03-11 20:10:15 [GetAccountDB] type=2, valor='admin2', valor2='admin2', SQL='SELECT * FROM accounts WHERE username=@valor AND password=@valor2 LIMIT 1'
+2026-03-11 20:10:15 [GetAccountDB] HasRows=True
+2026-03-11 20:10:17 [AUTH] PROTOCOL_BASE_LOGIN_ACK; Address: 127.0.0.1:6654; Opcode: [1283]
+2026-03-11 20:10:17 [AUTH] PROTOCOL_AUTH_GET_POINT_CASH_ACK; Address: 127.0.0.1:6654; Opcode: [1058]

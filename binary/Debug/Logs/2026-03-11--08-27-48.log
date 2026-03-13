@@ -1,0 +1,76 @@
+﻿2026-03-11 08:27:48 Processed 1 configurations, 0 errors from Data/ServerConfig.json
+2026-03-11 08:27:48 Server configurations loaded: 1 configs from Data/ServerConfig.json
+2026-03-11 08:27:48 Plugin Loaded: 2 Command Helpers
+2026-03-11 08:27:48 Plugin Loaded: 18 Allowed DRAR
+2026-03-11 08:27:48 All critical configurations validated successfully
+2026-03-11 08:27:48 Plugin Loaded: 1 Event Login
+2026-03-11 08:27:48 Plugin Loaded: 3 Event Boost Bonus
+2026-03-11 08:27:48 Plugin Loaded: 1 Event Rank Up
+2026-03-11 08:27:48 Plugin Loaded: 1 Time Events
+2026-03-11 08:27:48 Plugin Loaded: 1 Event Quest
+2026-03-11 08:27:48 Plugin Loaded: 7 Event Visit
+2026-03-11 08:27:48 Plugin Loaded: 1 Event X-Mas
+2026-03-11 08:27:48 Plugin Loaded: 6 Listed Event Portal
+2026-03-11 08:27:49 Invalid Category [42]: 4201050
+2026-03-11 08:27:49 Invalid Category [42]: 4203050
+2026-03-11 08:27:49 Invalid Category [42]: 4207050
+2026-03-11 08:27:49 Invalid Category [42]: 4230050
+2026-03-11 08:27:49 Plugin Loaded: 3835 Buyable Items
+2026-03-11 08:27:49 Plugin Loaded: 2 Repairable Items
+2026-03-11 08:27:49 Plugin Loaded: 0 Limited Items
+2026-03-11 08:27:49 Invalid Category [42]: 4201050
+2026-03-11 08:27:49 Invalid Category [42]: 4203050
+2026-03-11 08:27:49 Invalid Category [42]: 4207050
+2026-03-11 08:27:49 Invalid Category [42]: 4230050
+2026-03-11 08:27:49 Plugin Loaded: 640 Mission Card List
+2026-03-11 08:27:49 Plugin Loaded: 160 Mission Card Awards
+2026-03-11 08:27:49 Plugin Loaded: 1280 Mission Card List
+2026-03-11 08:27:49 Plugin Loaded: 7 Mission Reward Items
+2026-03-11 08:27:49 Plugin Loaded: 24 Basic Templates
+2026-03-11 08:27:49 Plugin Loaded: 2 PC Cafes
+2026-03-11 08:27:49 Plugin Loaded: 8 Award Templates
+2026-03-11 08:27:49 Plugin Loaded: 44 Title System
+2026-03-11 08:27:49 Plugin Loaded: 0 Title Awards
+2026-03-11 08:27:49 Plugin Loaded: 15 Mission Awards
+2026-03-11 08:27:49 Plugin Loaded: 16 Mission Stores
+2026-03-11 08:27:49 Plugin Loaded: 4 Server Channel
+2026-03-11 08:27:49 Plugin Loaded: 64 Map Rules
+2026-03-11 08:27:49 Plugin Loaded: 135 Map Matches
+2026-03-11 08:27:49 Plugin Loaded: 49 Clan Ranks
+2026-03-11 08:27:49 Plugin Loaded: 58 Player Ranks
+2026-03-11 08:27:49 Plugin Loaded: 26 Coupon Effects
+2026-03-11 08:27:49 Plugin Loaded: 7 Permissions
+2026-03-11 08:27:49 Plugin Loaded: 3 Permission Ranks
+2026-03-11 08:27:49 Plugin Loaded: 3 Level Permission
+2026-03-11 08:27:49 Plugin Loaded: 6 Random Boxes
+2026-03-11 08:27:49 Plugin Loaded: 8 Battle Boxes
+2026-03-11 08:27:49 Plugin Loaded: 17 Lib Hases
+2026-03-11 08:27:49 Plugin Loaded: 3 Internet Cafe Bonuses
+2026-03-11 08:27:49 Plugin Loaded: 16 Redeem Codes
+2026-03-11 08:27:49 Plugin Loaded: 3 Battle Rewards
+2026-03-11 08:27:49 Plugin Loaded: 1231 Nick Filters
+2026-03-11 08:27:49 ClassicMode Load Success
+2026-03-11 08:27:49 BattlePassManager: Starting Battle Pass data loading
+2026-03-11 08:27:49 BattlePassManager: They were loaded 1 seasons
+2026-03-11 08:27:49 active season found: Battle Pass Season 2 (ID: 1)
+2026-03-11 08:27:49 BattlePassManager: They were loaded 50 cards for the active season
+2026-03-11 08:27:49 BattlePassManager: Data load completed successfully
+2026-03-11 08:27:49 Plugin Loaded: 21 Competitive Ranks
+2026-03-11 08:27:49 RconManager Address ws://26.28.8.111:30000
+2026-03-11 08:27:50 Communication Address 127.0.0.1:1909
+2026-03-11 08:27:50 All Server Plugins Successfully Loaded
+2026-03-11 08:27:50 Auth Sync Address 127.0.0.1:1910
+2026-03-11 08:27:50 Auth Serv Address 127.0.0.1:39190
+2026-03-11 08:27:50 Loaded 2 clans successfully.
+2026-03-11 08:27:50 Game Sync Address 127.0.0.1:1911
+2026-03-11 08:27:50 Game Serv Address 127.0.0.1:39191
+2026-03-11 08:27:50 Game Sync Address 127.0.0.1:1912
+2026-03-11 08:27:50 Game Serv Address 127.0.0.1:39192
+2026-03-11 08:27:50 Game Sync Address 127.0.0.1:1913
+2026-03-11 08:27:50 Game Serv Address 127.0.0.1:39193
+2026-03-11 08:27:50 Match Sync Address 127.0.0.1:2729
+2026-03-11 08:27:50 Match Serv Address 127.0.0.1:40009
+2026-03-11 08:27:50 Startup Successful, Server Runtime 2026
+2026-03-11 08:28:25 CheckOut: Decrypt failed for IP: 127.0.0.1 | Mode: 2 | Ready: True
+2026-03-11 08:28:25 This connection is blocked for 5 seconds. IP: 127.0.0.1; Date:3/11/2026 8:28:25 AM
+2026-03-11 08:28:34 Conexión destruida por falta de respuestas. IP: 

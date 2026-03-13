@@ -1,0 +1,49 @@
+﻿2026-03-13 09:00:37 [+] CONNECT_ACK: SessionId=1, SessionSeed=0, Modulus=170b
+2026-03-13 09:00:37 [AUTH] PROTOCOL_BASE_CONNECT_ACK; Address: 127.0.0.1:14010; Opcode: [2306]
+2026-03-13 09:00:37 +--------+-------------------------------------------------+----------------+
+[!] RAW RECV [123 bytes]; Length: [123 Bytes] </>
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F |
++--------+-------------------------------------------------+----------------+
+|00000000| 78 80 1F 22 31 03 C2 54 10 ED B5 24 98 C4 7A 65 |x.."1..T...$..ze|
+|00000010| 6B BC 03 6A 76 D8 46 9D FA D2 ED 99 67 15 B4 C0 |k..jv.F.....g...|
+|00000020| 92 E5 1C 7D F0 1E FE 64 23 62 1B 39 89 93 5D 39 |...}...d#b.9..]9|
+|00000030| B8 2E A5 31 6E F5 29 9E 95 9C DC 23 E0 8A 04 D4 |...1n.)....#....|
+|00000040| 19 66 3C 86 3F 84 56 EE 12 CE F9 EC F7 89 A8 7C |.f<.?.V........||
+|00000050| CA 9C FF D5 73 EF E2 2B BD 44 95 B1 2A 40 50 F0 |....s..+.D..*@P.|
+|00000060| 0D B1 36 0C 9B 38 87 3B A6 BA B6 DE 60 25 D3 91 |..6..8.;....`%..|
+|00000070| B9 42 38 A9 49 3B 97 DC 2D 31 00                |.B8.I;..-1.     |
++--------+-------------------------------------------------+----------------+
+2026-03-13 09:00:37 [AUTH] PROTOCOL_BASE_LOGIN_REQ; Address: 127.0.0.1:14010; Opcode: [1281]
+2026-03-13 09:00:37 [LOGIN] username='admin2', password='admin2', token='admin2', crypted=False
+2026-03-13 09:00:37 [GetAccountDB] type=2, valor='admin2', valor2='admin2', SQL='SELECT * FROM accounts WHERE username=@valor AND password=@valor2 LIMIT 1'
+2026-03-13 09:00:37 [GetAccountDB] HasRows=True
+2026-03-13 09:00:38 [AUTH] PROTOCOL_BASE_LOGIN_ACK; Address: 127.0.0.1:14010; Opcode: [1283]
+2026-03-13 09:00:38 [AUTH] PROTOCOL_AUTH_GET_POINT_CASH_ACK; Address: 127.0.0.1:14010; Opcode: [1058]
+2026-03-13 09:00:39 +--------+-------------------------------------------------+----------------+
+[!] RAW RECV [19 bytes]; Length: [19 Bytes] </>
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F |
++--------+-------------------------------------------------+----------------+
+|00000000| 10 80 2C 07 C1 06 19 BE BD 0D 2B 82 CF 0E 07 6C |..,.......+....l|
+|00000010| F1 DC 01                                        |...             |
++--------+-------------------------------------------------+----------------+
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_GET_SYSTEM_INFO_REQ; Address: 127.0.0.1:14010; Opcode: [2314]
+2026-03-13 09:00:39 +--------+-------------------------------------------------+----------------+
+[!] RAW RECV [19 bytes]; Length: [19 Bytes] </>
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F |
++--------+-------------------------------------------------+----------------+
+|00000000| 10 80 1F 16 6D 08 A3 7C 55 00 F0 EA F7 A8 1E C9 |....m..|U.......|
+|00000010| 17 B3 02                                        |...             |
++--------+-------------------------------------------------+----------------+
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_GET_OPTION_REQ; Address: 127.0.0.1:14010; Opcode: [2320]
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_NOTICE_ACK; Address: 127.0.0.1:14010; Opcode: [2455]
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_URL_LIST_ACK; Address: 127.0.0.1:14010; Opcode: [2466]
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_BOOSTEVENT_INFO_ACK; Address: 127.0.0.1:14010; Opcode: [2469]
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_CHANNELTYPE_CONDITION_ACK; Address: 127.0.0.1:14010; Opcode: [2486]
+2026-03-13 09:00:39 [SYSINFO] Servers=4, Ranks=58
+2026-03-13 09:00:39 [SYSINFO] ServerList: count=4, total=148 (expected 148)
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_GET_SYSTEM_INFO_ACK; Address: 127.0.0.1:14010; Opcode: [2315]
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_BATTLE_MODE_WEAPON_INFO_ACK; Address: 127.0.0.1:14010; Opcode: [2484]
+2026-03-13 09:00:39 [AUTH] PROTOCOL_BASE_GET_OPTION_ACK; Address: 127.0.0.1:14010; Opcode: [2321]
