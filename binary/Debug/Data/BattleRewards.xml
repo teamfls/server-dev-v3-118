@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<List>
+    <Item Type="MVP" Count="4" Percentage="80">
+		<Rewards>
+			<Good Index="0" Id="23401103"/>
+			<Good Index="1" Id="10427703"/>
+			<Good Index="2" Id="10379903"/>
+			<Good Index="3" Id="10373703"/>
+		</Rewards>
+	</Item>
+	<Item Type="AssistKing" Count="4" Percentage="80">
+		<Rewards>
+			<Good Index="0" Id="23401101"/>
+			<Good Index="1" Id="10427701"/>
+			<Good Index="2" Id="10379901"/>
+			<Good Index="3" Id="10373701"/>
+		</Rewards>
+	</Item>
+	<Item Type="MultiKill" Count="4" Percentage="80">
+		<Rewards>
+			<Good Index="0" Id="23401102"/>
+			<Good Index="1" Id="10427702"/>
+			<Good Index="2" Id="10379902"/>
+			<Good Index="3" Id="10373702"/>
+		</Rewards>
+	</Item>
+</List>

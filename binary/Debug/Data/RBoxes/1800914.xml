@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<List>
+	<Item Count="16"> ;Demonic Gacha
+		<Rewards>
+			<Good Index="0" 	Id="10327404" 	Percent="30" 	Special="false" />
+			<Good Index="1" 	Id="10327404" 	Percent="45" 	Special="false" />
+			<Good Index="2" 	Id="10327403"	Percent="70" 	Special="false" />
+			<Good Index="3" 	Id="10327402"	Percent="100" 	Special="false" />
+			<Good Index="4" 	Id="10516704" 	Percent="30" 	Special="false" />
+			<Good Index="5" 	Id="10516703" 	Percent="45" 	Special="false" />
+			<Good Index="6" 	Id="10516703"	Percent="70" 	Special="false" />
+			<Good Index="7" 	Id="10516702"	Percent="100" 	Special="false" />
+			<Good Index="8" 	Id="10428804" 	Percent="30" 	Special="false" />
+			<Good Index="9" 	Id="10428803" 	Percent="45" 	Special="false" />
+			<Good Index="10" 	Id="10428802"	Percent="70" 	Special="false" />
+			<Good Index="11" 	Id="10428802"	Percent="100" 	Special="false" />
+			<Good Index="12" 	Id="10428604" 	Percent="30" 	Special="false" />
+			<Good Index="13" 	Id="10428603" 	Percent="45" 	Special="false" />
+			<Good Index="14" 	Id="10428602"	Percent="70" 	Special="false" />
+			<Good Index="15" 	Id="10428602"	Percent="100" 	Special="false" />
+		</Rewards>
+	</Item>
+</List>

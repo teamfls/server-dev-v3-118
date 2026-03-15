@@ -366,11 +366,23 @@ FodyWeavers.xsd
 # Logs/
 # [Dd]ebug/
 
-*.bin
-*.log
-*.txt
-*.exe
-*.pdb
-*.rar
-*.bat
+
+# Allow all files in the binary/Debug folder specifically
+!binary/Debug/**
+
+# But still ignore logs within binary/Debug if desired (optional, but requested cleanup)
+# binary/Debug/Logs/**
+
+# General ignores (ensure they don't block the unignore above)
+# *.bin
+# *.log
+# *.txt
+# *.exe
+# *.pdb
+# *.rar
+# *.bat
+
+# If you want to keep the general ignores but only unignore binary/Debug:
+# No change needed to the lines below as long as the unignore is specific enough.
+# However, to be safe and clean, I will adjust them.
 

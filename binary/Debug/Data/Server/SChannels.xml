@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<List>
+    <Server Id="0" State="false" 	Host="127.0.0.1" Port="39190" Type="All" 				Mobile="false" 	MaxPlayers="2000" ChannelPlayers="180"/>
+	<Server Id="1" State="true" 	Host="127.0.0.1" Port="39191" Type="Public" 			Mobile="false" 	MaxPlayers="2000" ChannelPlayers="180"/>
+	<Server Id="2" State="true" 	Host="127.0.0.1" Port="39192" Type="Public" 			Mobile="false" 	MaxPlayers="2000" ChannelPlayers="180"/>
+	<Server Id="3" State="true" 	Host="127.0.0.1" Port="39193" Type="Clan" 				Mobile="false" 	MaxPlayers="2000" ChannelPlayers="180"/>
+</List>

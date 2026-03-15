@@ -1,6 +1,0 @@
-﻿2026-03-11 06:04:13 Field not found in row: total_kills 
-System.IndexOutOfRangeException: Field not found in row: total_kills
-   at Npgsql.ThrowHelper.ThrowIndexOutOfRangeException(String message)
-   at Npgsql.BackendMessages.RowDescriptionMessage.GetFieldIndex(String name)
-   at Npgsql.NpgsqlDataReader.get_Item(String name)
-   at Server.Game.Data.Managers.ClanManager.Load() in D:\Server\380 new team 12\Server.Game\Data\Managers\ClanManager.cs:line 40

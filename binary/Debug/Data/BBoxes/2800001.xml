@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<List>
+	<BattleBox RequireTags="10"> ; Dragon Battle Box
+		<Rewards>
+			<Good Id="10439801" Percent="10" />
+			<Good Id="10332401" Percent="20" />
+			<Good Id="10435701" Percent="25" />
+			<Good Id="10435901" Percent="25" />
+			<Good Id="10436101" Percent="40" />
+			<Good Id="10519901" Percent="40" />
+			<Good Id="10520001" Percent="40" />
+			<Good Id="10609001" Percent="40" />
+			<Good Id="31501601" Percent="80" />
+			<Good Id="80035701" Percent="80" />
+		</Rewards>
+	</BattleBox>
+</List>

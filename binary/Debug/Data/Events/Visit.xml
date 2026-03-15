@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<List>
+    <Event Id="1" Begin="2511130420" Ended="2612012359" Title="ATTENDANCE CHECK P1" Days="4">
+		<Rewards>
+			<Box Day="1" GoodId1="10327901" GoodId2="10323201" Both="false" />
+			<Box Day="2" GoodId1="20209101" GoodId2="20203801" Both="false" />
+			<Box Day="3" GoodId1="10429801" GoodId2="10423701" Both="false" />
+			<Box Day="4" GoodId1="10429701" GoodId2="10423901" Both="false" />
+		</Rewards>
+	</Event>
+	<Event Id="2" Begin="2511130420" Ended="2612012359" Title="ATTENDANCE CHECK P2" Days="4">
+		<Rewards>
+			<Box Day="1" GoodId1="10327901" GoodId2="10323201" Both="false" />
+			<Box Day="2" GoodId1="20209101" GoodId2="20203801" Both="false" />
+			<Box Day="3" GoodId1="10429801" GoodId2="10423701" Both="false" />
+			<Box Day="4" GoodId1="10429701" GoodId2="10423901" Both="false" />
+		</Rewards>
+	</Event>
+	<Event Id="3" Begin="2511130420" Ended="2612012359" Title="ATTENDANCE CHECK P3" Days="4">
+		<Rewards>
+			<Box Day="1" GoodId1="10327901" GoodId2="10323201" Both="false" />
+			<Box Day="2" GoodId1="20209101" GoodId2="20203801" Both="false" />
+			<Box Day="3" GoodId1="10429801" GoodId2="10423701" Both="false" />
+			<Box Day="4" GoodId1="10429701" GoodId2="10423901" Both="false" />
+		</Rewards>
+	</Event>
+	<Event Id="4" Begin="2511130420" Ended="2612012359" Title="ATTENDANCE CHECK P4" Days="4">
+		<Rewards>
+			<Box Day="1" GoodId1="10327901" GoodId2="10323201" Both="false" />
+			<Box Day="2" GoodId1="20209101" GoodId2="20203801" Both="false" />
+			<Box Day="3" GoodId1="10429801" GoodId2="10423701" Both="false" />
+			<Box Day="4" GoodId1="10429701" GoodId2="10423901" Both="false" />
+		</Rewards>
+	</Event>
+	<Event Id="5" Begin="2511130420" Ended="2612012359" Title="POINT BLANK LATINO Visit Event!" Days="4">
+		<Rewards>
+			<Box Day="1" 	GoodId1="10323404" GoodId2="10331204" Both="false" />
+			<Box Day="2" 	GoodId1="10424104" GoodId2="10434104" Both="false" />
+			<Box Day="3" 	GoodId1="10513404" GoodId2="10519304" Both="false" />
+			<Box Day="4" 	GoodId1="20207604" GoodId2="20210504" Both="false" />
+		</Rewards>
+	</Event>
+	<Event Id="6" Begin="2511130420" Ended="2612012359" Title="POINT BLANK LATINO Visit Event!" Days="4">
+		<Rewards>
+			<Box Day="1" 	GoodId1="10323404" GoodId2="10331204" Both="false" />
+			<Box Day="2" 	GoodId1="10424104" GoodId2="10434104" Both="false" />
+			<Box Day="3" 	GoodId1="10513404" GoodId2="10519304" Both="false" />
+			<Box Day="4" 	GoodId1="20207604" GoodId2="20210504" Both="false" />
+		</Rewards>
+	</Event>
+	<Event Id="7" Begin="2511130420" Ended="2612012359" Title="POINT BLANK LATINO Visit Event!" Days="4">
+		<Rewards>
+			<Box Day="1" 	GoodId1="10323404" GoodId2="10331204" Both="false" />
+			<Box Day="2" 	GoodId1="10424104" GoodId2="10434104" Both="false" />
+			<Box Day="3" 	GoodId1="10513404" GoodId2="10519304" Both="false" />
+			<Box Day="4" 	GoodId1="20207604" GoodId2="20210504" Both="false" />
+		</Rewards>
+	</Event>
+</List>

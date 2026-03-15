@@ -1,4 +1,0 @@
-﻿2026-03-11 04:17:48 Object reference not set to an instance of an object. 
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at Server.Auth.Network.ClientPacket.PROTOCOL_BASE_LOGIN_REQ.ValidateInitialRequirements(ServerConfig config) in D:\Server\380 new team 12\Server.Auth\Network\ClientPacket\PROTOCOL_BASE_LOGIN_REQ.cs:line 198
-   at Server.Auth.Network.ClientPacket.PROTOCOL_BASE_LOGIN_REQ.Run() in D:\Server\380 new team 12\Server.Auth\Network\ClientPacket\PROTOCOL_BASE_LOGIN_REQ.cs:line 143
